@@ -1,0 +1,21 @@
+FUNCTION INPUT PARAMETERS
+-----------------------------
+input_root : example_pbh
+filter_name : I
+red_law : Damineli16
+
+VERSION INFORMATION
+-----------------------------
+2023-01-23 10:15:28.483129 : creation date
+eae288afd38395986c5749fdbbe9c136fb6e2b5d : PopStar commit
+5b8dbf8bd11e3b641d40af39f6fdc13b98f9b32e : PopSyCLE commit
+
+OTHER INFORMATION
+-----------------------------
+0.28292298316955566 : total runtime (s)
+109 : original candidate events (dark sources removed)
+96 : candidate events in survey window
+
+FILES CREATED
+-----------------------------
+example_pbh_refined_events_ubv_I_Damineli16.fits : refined events

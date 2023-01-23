@@ -1,0 +1,30 @@
+FUNCTION INPUT PARAMETERS
+-----------------------------
+hdf5_file , example.h5
+ebf_file , example.ebf
+fdm , 1
+pbh_mass , 40 , (Msun)
+r_max , 16.6 , (kpc)
+r_s , 18.6 , (kpc)
+gamma , 1
+v_esc , 550 , (km/s)
+rho_0 , 0.0093 , (Msun / pc^3)
+diagnostic_plots , False
+new_output_root , example_pbh
+seed , None
+
+VERSION INFORMATION
+-----------------------------
+2023-01-23 10:14:11.660911 : creation date
+5b8dbf8bd11e3b641d40af39f6fdc13b98f9b32e : PopSyCLE commit
+
+OTHER INFORMATION
+-----------------------------
+0.8949377536773682 : total runtime (s)
+717045 : original objects
+587 : PBHs in the field
+717632 : new total objects
+
+FILES CREATED
+-----------------------------
+example_pbh.h5 : HDF5 file

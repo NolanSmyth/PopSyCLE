@@ -20,8 +20,11 @@ from astropy.coordinates import SkyCoord  # High-level coordinates
 from astropy.coordinates import Angle  # Angles
 from astropy.table import Table
 from astropy.table import vstack
-from popstar.imf import imf
-from popstar import synthetic, evolution, reddening, ifmr
+# from popstar.imf import imf
+# from popstar import synthetic, evolution, reddening, ifmr
+#!note popstar was renamed/updated to spisea
+from spisea.imf import imf
+from spisea import synthetic, evolution, reddening, ifmr
 from scipy.interpolate import interp1d
 from scipy.spatial import cKDTree
 from scipy import special, integrate, interpolate
@@ -1127,7 +1130,8 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
     # changed from 0.08 to 0.1 at start because MIST can't handle.
     massLimits = np.array([0.1, 0.5, 120])
     powers = np.array([-1.3, -2.3])
-    my_ifmr = ifmr.IFMR()
+    # my_ifmr = ifmr.IFMR()
+    my_ifmr = ifmr.IFMR_Raithel18()
     ratio_file = '%s/current_initial_stellar_mass_ratio.txt' % iso_dir
     ratio = current_initial_ratio(logage=log_age,
                                   ratio_file=ratio_file,

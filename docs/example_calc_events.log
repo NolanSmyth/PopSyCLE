@@ -1,0 +1,25 @@
+FUNCTION INPUT PARAMETERS
+-----------------------------
+hdf5_file , example.h5
+output_root2 , example
+radius_cut , 2.0 , (arcsec)
+obs_time , 1000 , (days)
+n_obs , 11
+theta_frac , 2 , (thetaE)
+blend_rad , 0.65 , (arcsec)
+n_proc , 1
+
+VERSION INFORMATION
+-----------------------------
+2023-01-23 10:01:47.580033 : creation date
+5b8dbf8bd11e3b641d40af39f6fdc13b98f9b32e : PopSyCLE commit
+
+OTHER INFORMATION
+-----------------------------
+34.86113500595093 : total runtime (s)
+120 : total number of events
+
+FILES CREATED
+-----------------------------
+example_events.fits : events file
+example_blends.fits : blends file

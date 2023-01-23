@@ -1,0 +1,21 @@
+FUNCTION INPUT PARAMETERS
+-----------------------------
+longitude , 1.25
+latitude , -2.65
+area , 0.001
+galaxia_galaxy_model_filename , galaxyModelParams_PopSyCLEv1.txt
+seed , None
+
+VERSION INFORMATION
+-----------------------------
+2023-01-19 16:49:37.360973 : creation date
+5b8dbf8bd11e3b641d40af39f6fdc13b98f9b32e : PopSyCLE commit
+/Users/nolansmyth/Code/galaxia/galaxia/bin/galaxia : galaxia path
+
+OTHER INFORMATION
+-----------------------------
+71.20474410057068 : total runtime (s)
+
+FILES CREATED
+-----------------------------
+example.ebf : ebf file

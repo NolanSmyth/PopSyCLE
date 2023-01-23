@@ -6,8 +6,8 @@ Functions (and their associated functions) for additional photometric systems.
 import inspect
 import os
 import numpy as np
-from popstar import evolution, atmospheres, reddening, ifmr, synthetic
-from popstar.imf import multiplicity, imf
+from spisea import evolution, atmospheres, reddening, ifmr, synthetic
+from spisea.imf import multiplicity, imf
 from scipy.interpolate import griddata
 from scipy.spatial.ckdtree import cKDTree
 
@@ -53,7 +53,7 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
     """
 
     # Define isochrone parameters for calculating absolute magnitudes
-    logAge = np.log10(8 * 10 ** 9)  # Age in log(years)
+    logAge = np.log10(8 * 10**9)  # Age in log(years)
     dist = 10  # distance in parsec
     metallicity = 0  # Metallicity in [M/H]
 
@@ -63,9 +63,8 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
     red_law = reddening.RedLawDamineli16()
 
     # Also specify filters for synthetic photometry
-    filt_list = ['ztf,r', 'ztf,g', 'ztf,i',
-                 'ubv,B', 'ubv,V', 'ubv,R', 'ubv,I']
-    filt_list_reformat = ['m_%s' % f.replace(',', '_') for f in filt_list]
+    filt_list = ["ztf,r", "ztf,g", "ztf,i", "ubv,B", "ubv,V", "ubv,R", "ubv,I"]
+    filt_list_reformat = ["m_%s" % f.replace(",", "_") for f in filt_list]
 
     # Make multiplicity object
     imf_multi = multiplicity.MultiplicityUnresolved()
@@ -78,7 +77,7 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
     my_imf = imf.IMF_broken_powerlaw(massLimits, powers, imf_multi)
 
     # Define total cluster mass
-    mass = 10 ** 5.
+    mass = 10**5.0
 
     # Make ifmr
     my_ifmr = ifmr.IFMR()
@@ -92,51 +91,56 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
     ztf_i = np.array([])
 
     # Create photometry for a range of extinctions
-    for AKs in np.arange(0, 1.1, .1):
-        my_iso = synthetic.IsochronePhot(logAge, AKs, dist,
-                                         metallicity=metallicity,
-                                         evo_model=evo_model,
-                                         atm_func=atm_func,
-                                         red_law=red_law,
-                                         filters=filt_list,
-                                         iso_dir=iso_dir)
+    for AKs in np.arange(0, 1.1, 0.1):
+        my_iso = synthetic.IsochronePhot(
+            logAge,
+            AKs,
+            dist,
+            metallicity=metallicity,
+            evo_model=evo_model,
+            atm_func=atm_func,
+            red_law=red_law,
+            filters=filt_list,
+            iso_dir=iso_dir,
+        )
         # Check that the isochrone has all of the filters in filt_list
         # If not, force recreating the isochrone with recomp=True
-        iso_filters = [f for f in my_iso.points.colnames if 'm_' in f]
+        iso_filters = [f for f in my_iso.points.colnames if "m_" in f]
         if len(set(filt_list_reformat) - set(iso_filters)) > 0:
-            my_iso = synthetic.IsochronePhot(logAge, AKs, dist,
-                                             metallicity=metallicity,
-                                             evo_model=evo_model,
-                                             atm_func=atm_func,
-                                             red_law=red_law,
-                                             filters=filt_list,
-                                             iso_dir=iso_dir,
-                                             recomp=True)
+            my_iso = synthetic.IsochronePhot(
+                logAge,
+                AKs,
+                dist,
+                metallicity=metallicity,
+                evo_model=evo_model,
+                atm_func=atm_func,
+                red_law=red_law,
+                filters=filt_list,
+                iso_dir=iso_dir,
+                recomp=True,
+            )
         # Make cluster object
-        cluster = synthetic.ResolvedCluster(my_iso, my_imf, mass,
-                                            ifmr=my_ifmr)
+        cluster = synthetic.ResolvedCluster(my_iso, my_imf, mass, ifmr=my_ifmr)
         clust = cluster.star_systems
-        cond = ~np.isnan(clust['m_ubv_V'])
+        cond = ~np.isnan(clust["m_ubv_V"])
         clust = clust[cond]
-        clust_cond = np.random.choice(np.arange(len(clust)),
-                                      size=10000, replace=False)
+        clust_cond = np.random.choice(np.arange(len(clust)), size=10000, replace=False)
 
-        ubv_b = np.append(ubv_b, clust['m_ubv_B'][clust_cond])
-        ubv_v = np.append(ubv_v, clust['m_ubv_V'][clust_cond])
-        ubv_r = np.append(ubv_r, clust['m_ubv_R'][clust_cond])
-        ubv_i = np.append(ubv_i, clust['m_ubv_I'][clust_cond])
-        ztf_g = np.append(ztf_g, clust['m_ztf_g'][clust_cond])
-        ztf_r = np.append(ztf_r, clust['m_ztf_r'][clust_cond])
-        ztf_i = np.append(ztf_i, clust['m_ztf_i'][clust_cond])
+        ubv_b = np.append(ubv_b, clust["m_ubv_B"][clust_cond])
+        ubv_v = np.append(ubv_v, clust["m_ubv_V"][clust_cond])
+        ubv_r = np.append(ubv_r, clust["m_ubv_R"][clust_cond])
+        ubv_i = np.append(ubv_i, clust["m_ubv_I"][clust_cond])
+        ztf_g = np.append(ztf_g, clust["m_ztf_g"][clust_cond])
+        ztf_r = np.append(ztf_r, clust["m_ztf_r"][clust_cond])
+        ztf_i = np.append(ztf_i, clust["m_ztf_i"][clust_cond])
 
     # Given the filter name, define a difference in magnitude to be fit for
-    if filter_name == 'g':
+    if filter_name == "g":
         delta_m = ztf_g - ubv_v
-    elif filter_name == 'r':
+    elif filter_name == "r":
         delta_m = ztf_r - ubv_r
-    elif filter_name == 'i':
+    elif filter_name == "i":
         delta_m = ztf_i - ubv_i
-
 
     # Colors in both x and y direction go from 0 to 6 magnitudes
     # x_grid_arr: ubv_v - ubv_r
@@ -146,10 +150,12 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
 
     # Create a grid of values on x_grid_arr and y_grid_arr
     # with linear algorithm
-    ubv_to_ztf_grid = griddata((ubv_v - ubv_r, ubv_b - ubv_v),
-                               delta_m,
-                               (x_grid_arr[None, :], y_grid_arr[:, None]),
-                               method='linear')
+    ubv_to_ztf_grid = griddata(
+        (ubv_v - ubv_r, ubv_b - ubv_v),
+        delta_m,
+        (x_grid_arr[None, :], y_grid_arr[:, None]),
+        method="linear",
+    )
 
     # Resample this grid with both the liner and nearest algorithms onto a
     # finer grid. This allows for the 'nearest' method to
@@ -158,17 +164,19 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
     xx, yy = xx.flatten(), yy.flatten()
 
     cond = ~np.isnan(ubv_to_ztf_grid.flatten())
-    ubv_to_ztf_grid_filled = griddata((xx[cond], yy[cond]),
-                                      ubv_to_ztf_grid.flatten()[cond],
-                                      (x_grid_arr[None, :],
-                                       y_grid_arr[:, None]),
-                                      method='linear')
+    ubv_to_ztf_grid_filled = griddata(
+        (xx[cond], yy[cond]),
+        ubv_to_ztf_grid.flatten()[cond],
+        (x_grid_arr[None, :], y_grid_arr[:, None]),
+        method="linear",
+    )
 
-    ubv_to_ztf_grid_nearest = griddata((xx[cond], yy[cond]),
-                                       ubv_to_ztf_grid.flatten()[cond],
-                                       (x_grid_arr[None, :],
-                                        y_grid_arr[:, None]),
-                                       method='nearest')
+    ubv_to_ztf_grid_nearest = griddata(
+        (xx[cond], yy[cond]),
+        ubv_to_ztf_grid.flatten()[cond],
+        (x_grid_arr[None, :], y_grid_arr[:, None]),
+        method="nearest",
+    )
 
     # Place values into final grid from linear algorthm, and from the
     # nearest algorithm where the linear algorithm could not find a solution
@@ -179,11 +187,13 @@ def generate_ubv_to_ztf_grid(iso_dir, filter_name):
 
     # Save the data
     grid_arr = np.squeeze(np.dstack([xx, yy]), axis=0)
-    data_dir = '%s/data' % os.path.dirname(inspect.getfile(generate_ubv_to_ztf_grid))
-    ubv_to_ztf_filename = '%s/ubv_to_ztf-%s_grid.npz' % (data_dir, filter_name)
-    np.savez(ubv_to_ztf_filename,
-             ubv_to_ztf_grid=ubv_to_ztf_grid_final.astype(np.float32),
-             kdtree_grid=grid_arr.astype(np.float32))
+    data_dir = "%s/data" % os.path.dirname(inspect.getfile(generate_ubv_to_ztf_grid))
+    ubv_to_ztf_filename = "%s/ubv_to_ztf-%s_grid.npz" % (data_dir, filter_name)
+    np.savez(
+        ubv_to_ztf_filename,
+        ubv_to_ztf_grid=ubv_to_ztf_grid_final.astype(np.float32),
+        kdtree_grid=grid_arr.astype(np.float32),
+    )
 
 
 def load_ubv_to_ztf_grid(filter_name):
@@ -228,17 +238,17 @@ def load_ubv_to_ztf_grid(filter_name):
 
     """
     # Check for correct filter
-    if filter_name not in ['g', 'r', 'i']:
+    if filter_name not in ["g", "r", "i"]:
         raise Exception("filter_name must be in: ['g', 'r', 'i']")
 
     # Load the ubv_to_ztf_grid from the file
-    data_dir = '%s/data' % os.path.dirname(inspect.getfile(load_ubv_to_ztf_grid))
-    ubv_to_ztf_filename = '%s/ubv_to_ztf-%s_grid.npz' % (data_dir, filter_name)
+    data_dir = "%s/data" % os.path.dirname(inspect.getfile(load_ubv_to_ztf_grid))
+    ubv_to_ztf_filename = "%s/ubv_to_ztf-%s_grid.npz" % (data_dir, filter_name)
     ubv_to_ztf_grid_file = np.load(ubv_to_ztf_filename)
 
     # Generate a kdtree at the locations of all of the grid points
-    ubv_to_ztf_grid = ubv_to_ztf_grid_file['ubv_to_ztf_grid']
-    kdtree = cKDTree(ubv_to_ztf_grid_file['kdtree_grid'])
+    ubv_to_ztf_grid = ubv_to_ztf_grid_file["ubv_to_ztf_grid"]
+    kdtree = cKDTree(ubv_to_ztf_grid_file["kdtree_grid"])
 
     return ubv_to_ztf_grid, kdtree
 
@@ -280,11 +290,11 @@ def transform_ubv_to_ztf(filter_name, ubv_B, ubv_V, ubv_R, ubv_I=None):
 
     """
     # Check for correct filter
-    if filter_name not in ['g', 'r', 'i']:
+    if filter_name not in ["g", "r", "i"]:
         raise Exception("filter_name must be in: ['g', 'r', 'i']")
 
-    if filter_name == 'i' and ubv_I is None:
-        raise Exception('ubv_I must be provided to convert to ztf_i')
+    if filter_name == "i" and ubv_I is None:
+        raise Exception("ubv_I must be provided to convert to ztf_i")
 
     # Convert the ubv photometry into the right format
     x_data = ubv_V - ubv_R
@@ -304,11 +314,11 @@ def transform_ubv_to_ztf(filter_name, ubv_B, ubv_V, ubv_R, ubv_I=None):
     ztf_diff[cond_lum] = ubv_to_ztf_grid.flatten()[indexes]
 
     # Convert to ztf_g, ztf_r or ztf_i
-    if filter_name == 'g':
+    if filter_name == "g":
         ztf_mag = ubv_V + ztf_diff
-    elif filter_name == 'r':
+    elif filter_name == "r":
         ztf_mag = ubv_R + ztf_diff
-    elif filter_name == 'i':
+    elif filter_name == "i":
         ztf_mag = ubv_I + ztf_diff
 
     return ztf_mag
@@ -336,14 +346,14 @@ def ztf_mag_vega_to_AB(ztf_mag_vega, filter_name):
         ztf photometry of galaxia / PyPopStar sources in AB system
 
     """
-    if filter_name == 'g':
+    if filter_name == "g":
         ztf_mag_AB = ztf_mag_vega - 0.07
-    elif filter_name == 'r':
+    elif filter_name == "r":
         ztf_mag_AB = ztf_mag_vega + 0.19
-    elif filter_name == 'i':
+    elif filter_name == "i":
         ztf_mag_AB = ztf_mag_vega + 0.43
     else:
-        raise Exception('filter_name must be either g or r or i')
+        raise Exception("filter_name must be either g or r or i")
 
     return ztf_mag_AB
 
@@ -370,13 +380,13 @@ def ztf_mag_AB_to_vega(ztf_mag_AB, filter_name):
         ztf photometry of galaxia / PyPopStar sources in vega system
 
     """
-    if filter_name == 'g':
+    if filter_name == "g":
         ztf_mag_vega = ztf_mag_AB + 0.07
-    elif filter_name == 'r':
+    elif filter_name == "r":
         ztf_mag_vega = ztf_mag_AB - 0.19
-    elif filter_name == 'i':
+    elif filter_name == "i":
         ztf_mag_vega = ztf_mag_AB - 0.43
     else:
-        raise Exception('filter_name must be either g or r or i')
+        raise Exception("filter_name must be either g or r or i")
 
     return ztf_mag_vega
