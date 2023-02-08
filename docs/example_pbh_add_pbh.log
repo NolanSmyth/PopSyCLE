@@ -3,7 +3,7 @@ FUNCTION INPUT PARAMETERS
 hdf5_file , example.h5
 ebf_file , example.ebf
 fdm , 1
-pbh_mass , 40 , (Msun)
+pbh_mass , 30 , (Msun)
 r_max , 16.6 , (kpc)
 r_s , 18.6 , (kpc)
 gamma , 1
@@ -15,15 +15,15 @@ seed , None
 
 VERSION INFORMATION
 -----------------------------
-2023-01-23 10:14:11.660911 : creation date
-5b8dbf8bd11e3b641d40af39f6fdc13b98f9b32e : PopSyCLE commit
+2023-01-24 09:46:11.594106 : creation date
+832d9bd7a8dd368b25ae4b11fc1234564ffa8d6f : PopSyCLE commit
 
 OTHER INFORMATION
 -----------------------------
-0.8949377536773682 : total runtime (s)
+0.5013599395751953 : total runtime (s)
 717045 : original objects
-587 : PBHs in the field
-717632 : new total objects
+703 : PBHs in the field
+717748 : new total objects
 
 FILES CREATED
 -----------------------------
