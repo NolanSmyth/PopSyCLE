@@ -2,11 +2,11 @@ FUNCTION INPUT PARAMETERS
 -----------------------------
 hdf5_file , example.h5
 ebf_file , example.ebf
-fdm , 1
+fdm , 1.0
 pbh_mass , 30 , (Msun)
 r_max , 16.6 , (kpc)
 r_s , 18.6 , (kpc)
-gamma , 1
+gamma , 1.0
 v_esc , 550 , (km/s)
 rho_0 , 0.0093 , (Msun / pc^3)
 diagnostic_plots , False
@@ -15,15 +15,15 @@ seed , None
 
 VERSION INFORMATION
 -----------------------------
-2023-01-24 09:46:11.594106 : creation date
-832d9bd7a8dd368b25ae4b11fc1234564ffa8d6f : PopSyCLE commit
+2023-02-09 07:27:31.586823 : creation date
+7484383498688b507bb4a833937fab388e9cf41a : PopSyCLE commit
 
 OTHER INFORMATION
 -----------------------------
-0.5013599395751953 : total runtime (s)
-717045 : original objects
-703 : PBHs in the field
-717748 : new total objects
+53.36391615867615 : total runtime (s)
+75440179 : original objects
+150622 : PBHs in the field
+75590801 : new total objects
 
 FILES CREATED
 -----------------------------

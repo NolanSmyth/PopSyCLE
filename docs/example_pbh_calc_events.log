@@ -7,17 +7,17 @@ obs_time , 1825 , (days)
 n_obs , 608
 theta_frac , 2 , (thetaE)
 blend_rad , 0.09 , (arcsec)
-n_proc , 1
+n_proc , 7
 
 VERSION INFORMATION
 -----------------------------
-2023-01-24 10:20:27.942156 : creation date
-832d9bd7a8dd368b25ae4b11fc1234564ffa8d6f : PopSyCLE commit
+2023-02-11 03:51:38.743243 : creation date
+7484383498688b507bb4a833937fab388e9cf41a : PopSyCLE commit
 
 OTHER INFORMATION
 -----------------------------
-1558.9410569667816 : total runtime (s)
-416 : total number of events
+159847.00464081764 : total runtime (s)
+26508 : total number of events
 
 FILES CREATED
 -----------------------------

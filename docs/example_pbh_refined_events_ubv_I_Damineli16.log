@@ -6,15 +6,15 @@ red_law : Damineli16
 
 VERSION INFORMATION
 -----------------------------
-2023-01-24 11:21:36.890818 : creation date
+2023-02-11 07:47:42.678152 : creation date
 eae288afd38395986c5749fdbbe9c136fb6e2b5d : PopStar commit
-832d9bd7a8dd368b25ae4b11fc1234564ffa8d6f : PopSyCLE commit
+7484383498688b507bb4a833937fab388e9cf41a : PopSyCLE commit
 
 OTHER INFORMATION
 -----------------------------
-0.6865227222442627 : total runtime (s)
-380 : original candidate events (dark sources removed)
-370 : candidate events in survey window
+32.61137914657593 : total runtime (s)
+24503 : original candidate events (dark sources removed)
+23418 : candidate events in survey window
 
 FILES CREATED
 -----------------------------
