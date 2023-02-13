@@ -20,6 +20,7 @@ from astropy.coordinates import SkyCoord  # High-level coordinates
 from astropy.coordinates import Angle  # Angles
 from astropy.table import Table
 from astropy.table import vstack
+
 # from popstar.imf import imf
 # from popstar import synthetic, evolution, reddening, ifmr
 #!note popstar was renamed/updated to spisea
@@ -50,8 +51,8 @@ from popsycle import utils
 # Conversions.
 ##########
 masyr_to_degday = 1.0 * (1.0e-3 / 3600.0) * (1.0 / 365.25)
-kms_to_kpcday = 1.0 * (3.086 * 10 ** 16) ** -1 * 86400.0
-au_to_kpc = 4.848 * 10 ** -9
+kms_to_kpcday = 1.0 * (3.086 * 10**16) ** -1 * 86400.0
+au_to_kpc = 4.848 * 10**-9
 
 ##########
 # Prep converter function for determining
@@ -71,39 +72,45 @@ _Mclust_v_age_func = None
 # G = 472.274, R = 633.961, I = 788.613
 ##########
 filt_dict = {}
-filt_dict['ubv_J'] = {'Schlafly11': 0.709, 'Schlegel99': 0.902, 'Damineli16': 0.662}
-filt_dict['ubv_H'] = {'Schlafly11': 0.449, 'Schlegel99': 0.576, 'Damineli16': 0.344}
-filt_dict['ubv_K'] = {'Schlafly11': 0.302, 'Schlegel99': 0.367, 'Damineli16': 0.172}
-filt_dict['ubv_U'] = {'Schlafly11': 4.334, 'Schlegel99': 5.434, 'Damineli16': 5.022}
-filt_dict['ubv_B'] = {'Schlafly11': 3.626, 'Schlegel99': 4.315, 'Damineli16': 3.757}
-filt_dict['ubv_V'] = {'Schlafly11': 2.742, 'Schlegel99': 3.315, 'Damineli16': 2.757}
-filt_dict['ubv_I'] = {'Schlafly11': 1.505, 'Schlegel99': 1.940, 'Damineli16': 1.496}
-filt_dict['ubv_R'] = {'Schlafly11': 2.169, 'Schlegel99': 2.634, 'Damineli16': 2.102}
-filt_dict['ztf_g'] = {'Damineli16': 3.453}
-filt_dict['ztf_r'] = {'Damineli16': 2.228}
-filt_dict['ztf_i'] = {'Damineli16': 1.553}
+filt_dict["ubv_J"] = {"Schlafly11": 0.709, "Schlegel99": 0.902, "Damineli16": 0.662}
+filt_dict["ubv_H"] = {"Schlafly11": 0.449, "Schlegel99": 0.576, "Damineli16": 0.344}
+filt_dict["ubv_K"] = {"Schlafly11": 0.302, "Schlegel99": 0.367, "Damineli16": 0.172}
+filt_dict["ubv_U"] = {"Schlafly11": 4.334, "Schlegel99": 5.434, "Damineli16": 5.022}
+filt_dict["ubv_B"] = {"Schlafly11": 3.626, "Schlegel99": 4.315, "Damineli16": 3.757}
+filt_dict["ubv_V"] = {"Schlafly11": 2.742, "Schlegel99": 3.315, "Damineli16": 2.757}
+filt_dict["ubv_I"] = {"Schlafly11": 1.505, "Schlegel99": 1.940, "Damineli16": 1.496}
+filt_dict["ubv_R"] = {"Schlafly11": 2.169, "Schlegel99": 2.634, "Damineli16": 2.102}
+filt_dict["ztf_g"] = {"Damineli16": 3.453}
+filt_dict["ztf_r"] = {"Damineli16": 2.228}
+filt_dict["ztf_i"] = {"Damineli16": 1.553}
 
 ##########
 # Dictionary for listing out supported photometric systems and filters
 ##########
 photometric_system_dict = {}
-photometric_system_dict['ubv'] = ['J', 'H', 'K', 'U', 'B', 'V', 'I', 'R']
-photometric_system_dict['ztf'] = ['g', 'r', 'i']
+photometric_system_dict["ubv"] = ["J", "H", "K", "U", "B", "V", "I", "R"]
+photometric_system_dict["ztf"] = ["g", "r", "i"]
 
 ##########
 # List of all supported photometric systems and filters with PyPopStar labels
 ##########
-all_filt_list = ['ubv,U', 'ubv,B', 'ubv,V', 'ubv,I', 'ubv,R',
-                 'ukirt,H', 'ukirt,K', 'ukirt,J']
+all_filt_list = [
+    "ubv,U",
+    "ubv,B",
+    "ubv,V",
+    "ubv,I",
+    "ubv,R",
+    "ukirt,H",
+    "ukirt,K",
+    "ukirt,J",
+]
 
 ###########################################################################
 ############# Population synthesis and associated functions ###############
 ###########################################################################
 
 
-def write_galaxia_params(output_root,
-                         longitude, latitude, area,
-                         seed=None):
+def write_galaxia_params(output_root, longitude, latitude, area, seed=None):
     """
     Given an object root, sky location and area, creates the parameter
     file that Galaxia requires for running. User can also specify a seed for
@@ -165,21 +172,22 @@ def write_galaxia_params(output_root,
         "seed %i" % seed,
         "r_max 30",
         "starType 0",
-        "photoError 0"
+        "photoError 0",
     ]
 
-    galaxia_param_fname = 'galaxia_params.%s.txt' % output_root
+    galaxia_param_fname = "galaxia_params.%s.txt" % output_root
 
-    print('** Generating %s **' % galaxia_param_fname)
+    print("** Generating %s **" % galaxia_param_fname)
 
-    with open(galaxia_param_fname, 'w') as f:
+    with open(galaxia_param_fname, "w") as f:
         for param in params:
-            f.write(param + '\n')
-            print('-- %s' % param)
+            f.write(param + "\n")
+            print("-- %s" % param)
 
 
-def _check_run_galaxia(output_root, longitude, latitude, area,
-                       galaxia_galaxy_model_filename, seed):
+def _check_run_galaxia(
+    output_root, longitude, latitude, area, galaxia_galaxy_model_filename, seed
+):
     """
     Check that the inputs to run_galaxia are valid
 
@@ -211,60 +219,76 @@ def _check_run_galaxia(output_root, longitude, latitude, area,
     """
 
     if type(output_root) != str:
-        raise Exception('output_root (%s) must be a string.' % str(output_root))
+        raise Exception("output_root (%s) must be a string." % str(output_root))
 
     if type(longitude) != int:
         if type(longitude) != float:
-            raise Exception('longitude (%s) must be an integer or a float.' % str(longitude))
+            raise Exception(
+                "longitude (%s) must be an integer or a float." % str(longitude)
+            )
 
     if type(latitude) != int:
         if type(latitude) != float:
-            raise Exception('latitude (%s) must be an integer or a float.' % str(latitude))
+            raise Exception(
+                "latitude (%s) must be an integer or a float." % str(latitude)
+            )
 
     if type(area) != int:
         if type(area) != float:
-            raise Exception('area (%s) must be an integer or a float.' % str(area))
+            raise Exception("area (%s) must be an integer or a float." % str(area))
 
     # Check that galaxia is in the executable PATH
-    if spawn.find_executable('galaxia') is None:
-        raise Exception('galaxia is not an executable currently in $PATH')
+    if spawn.find_executable("galaxia") is None:
+        raise Exception("galaxia is not an executable currently in $PATH")
 
     # Confrim that galaxia is the PopSyCLE compliant version
-    stdout, _ = utils.execute('galaxia --version')
-    galaxia_version = stdout.replace('\n', '').split()[1]
-    if galaxia_version != '0.7.2.1':
-        raise Exception('galaxia must be version 0.7.2.1 installed from https://github.com/jluastro/galaxia')
+    stdout, _ = utils.execute("galaxia --version")
+    galaxia_version = stdout.replace("\n", "").split()[1]
+    if galaxia_version != "0.7.2.1":
+        raise Exception(
+            "galaxia must be version 0.7.2.1 installed from https://github.com/jluastro/galaxia"
+        )
 
     # Check the galaxia_galaxy_model_filename for correct type and existence
     if type(galaxia_galaxy_model_filename) != str:
-        raise Exception('galaxia_galaxy_model_filename (%s) must be a string.' % str(galaxia_galaxy_model_filename))
+        raise Exception(
+            "galaxia_galaxy_model_filename (%s) must be a string."
+            % str(galaxia_galaxy_model_filename)
+        )
 
     if not os.path.exists(galaxia_galaxy_model_filename):
-        raise Exception('galaxia_galaxy_model_filename (%s) does not exist' % galaxia_galaxy_model_filename)
+        raise Exception(
+            "galaxia_galaxy_model_filename (%s) does not exist"
+            % galaxia_galaxy_model_filename
+        )
 
     # Check that GalaxiaData is a valid galaxia folder
     GalaxiaData = None
-    for line in open(galaxia_galaxy_model_filename, 'r'):
-        if 'GalaxiaData' in line:
-            GalaxiaData = line.replace('\n','').split()[1]
+    for line in open(galaxia_galaxy_model_filename, "r"):
+        if "GalaxiaData" in line:
+            GalaxiaData = line.replace("\n", "").split()[1]
             break
 
     if GalaxiaData is None:
-        raise Exception('GalaxiaData missing from '
-                        'galaxia_galaxy_model_filename (%s)' % galaxia_galaxy_model_filename)
+        raise Exception(
+            "GalaxiaData missing from "
+            "galaxia_galaxy_model_filename (%s)" % galaxia_galaxy_model_filename
+        )
 
     if not os.path.exists(GalaxiaData):
-        raise Exception('GalaxiaData (%s) in galaxia_galaxy_model_filename '
-                        '(%s) does not exist' % (GalaxiaData, galaxia_galaxy_model_filename))
+        raise Exception(
+            "GalaxiaData (%s) in galaxia_galaxy_model_filename "
+            "(%s) does not exist" % (GalaxiaData, galaxia_galaxy_model_filename)
+        )
 
     if seed is not None:
         if type(seed) != int:
-            raise Exception('seed (%s) must be None or an integer.' % str(seed))
+            raise Exception("seed (%s) must be None or an integer." % str(seed))
 
 
-def run_galaxia(output_root, longitude, latitude, area,
-                galaxia_galaxy_model_filename,
-                seed=None):
+def run_galaxia(
+    output_root, longitude, latitude, area, galaxia_galaxy_model_filename, seed=None
+):
     """
     Given an object root, sky location and area, creates the parameter
     file that Galaxia requires for running and executes Galaxia.
@@ -300,70 +324,108 @@ def run_galaxia(output_root, longitude, latitude, area,
     """
 
     # Error handling/complaining if input types are not right.
-    _check_run_galaxia(output_root, longitude, latitude, area,
-                       galaxia_galaxy_model_filename, seed)
+    _check_run_galaxia(
+        output_root, longitude, latitude, area, galaxia_galaxy_model_filename, seed
+    )
 
     # Writes out galaxia params to disk
-    write_galaxia_params(output_root=output_root,
-                         longitude=longitude,
-                         latitude=latitude,
-                         area=area,
-                         seed=seed)
+    write_galaxia_params(
+        output_root=output_root,
+        longitude=longitude,
+        latitude=latitude,
+        area=area,
+        seed=seed,
+    )
 
     # Execute Galaxia
-    cmd = 'galaxia -r galaxia_params.%s.txt %s' % (output_root, galaxia_galaxy_model_filename)
-    print('** Executing Galaxia with galaxia_params.%s.txt '
-          'and %s **' % (output_root, galaxia_galaxy_model_filename))
+    cmd = "galaxia -r galaxia_params.%s.txt %s" % (
+        output_root,
+        galaxia_galaxy_model_filename,
+    )
+    print(
+        "** Executing Galaxia with galaxia_params.%s.txt "
+        "and %s **" % (output_root, galaxia_galaxy_model_filename)
+    )
     t0 = time.time()
     _ = utils.execute(cmd)
     t1 = time.time()
-    print('Galaxia complete')
-    print('galaxia runtime : {0:f} s'.format(t1 - t0))
+    print("Galaxia complete")
+    print("galaxia runtime : {0:f} s".format(t1 - t0))
 
     ##########
     # Make log file
     ##########
 
-    stdout, _ = utils.execute('which galaxia')
-    galaxia_path = stdout.replace('\n', '')
+    stdout, _ = utils.execute("which galaxia")
+    galaxia_path = stdout.replace("\n", "")
 
     now = datetime.datetime.now()
     popsycle_path = os.path.dirname(inspect.getfile(run_galaxia))
-    popsycle_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                             cwd=popsycle_path).decode('ascii').strip()
-    dash_line = '-----------------------------' + '\n'
-    empty_line = '\n'
+    popsycle_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popsycle_path)
+        .decode("ascii")
+        .strip()
+    )
+    dash_line = "-----------------------------" + "\n"
+    empty_line = "\n"
 
-    line0 = 'FUNCTION INPUT PARAMETERS' + '\n'
-    line1 = 'longitude , ' + str(longitude) + '\n'
-    line2 = 'latitude , ' + str(latitude) + '\n'
-    line3 = 'area , ' + str(area) + '\n'
-    line3b = 'galaxia_galaxy_model_filename , ' + galaxia_galaxy_model_filename + '\n'
-    line4 = 'seed , ' + str(seed) + '\n'
+    line0 = "FUNCTION INPUT PARAMETERS" + "\n"
+    line1 = "longitude , " + str(longitude) + "\n"
+    line2 = "latitude , " + str(latitude) + "\n"
+    line3 = "area , " + str(area) + "\n"
+    line3b = "galaxia_galaxy_model_filename , " + galaxia_galaxy_model_filename + "\n"
+    line4 = "seed , " + str(seed) + "\n"
 
-    line8 = 'VERSION INFORMATION' + '\n'
-    line9 = str(now) + ' : creation date' + '\n'
-    line10 = popsycle_hash + ' : PopSyCLE commit' + '\n'
-    line11 = galaxia_path + ' : galaxia path' + '\n'
+    line8 = "VERSION INFORMATION" + "\n"
+    line9 = str(now) + " : creation date" + "\n"
+    line10 = popsycle_hash + " : PopSyCLE commit" + "\n"
+    line11 = galaxia_path + " : galaxia path" + "\n"
 
-    line12 = 'OTHER INFORMATION' + '\n'
-    line13 = str(t1 - t0) + ' : total runtime (s)' + '\n'
+    line12 = "OTHER INFORMATION" + "\n"
+    line13 = str(t1 - t0) + " : total runtime (s)" + "\n"
 
-    line17 = 'FILES CREATED' + '\n'
-    line18 = output_root + '.ebf : ebf file' + '\n'
+    line17 = "FILES CREATED" + "\n"
+    line18 = output_root + ".ebf : ebf file" + "\n"
 
-    with open(output_root + '_galaxia.log', 'w') as out:
-        out.writelines([line0, dash_line, line1, line2, line3, line3b, line4,
-                        empty_line, line8, dash_line, line9, line10, line11,
-                        empty_line, line12, dash_line, line13,
-                        empty_line, line17, dash_line, line18])
+    with open(output_root + "_galaxia.log", "w") as out:
+        out.writelines(
+            [
+                line0,
+                dash_line,
+                line1,
+                line2,
+                line3,
+                line3b,
+                line4,
+                empty_line,
+                line8,
+                dash_line,
+                line9,
+                line10,
+                line11,
+                empty_line,
+                line12,
+                dash_line,
+                line13,
+                empty_line,
+                line17,
+                dash_line,
+                line18,
+            ]
+        )
 
 
-def _check_perform_pop_syn(ebf_file, output_root, iso_dir,
-                           bin_edges_number,
-                           BH_kick_speed_mean, NS_kick_speed_mean,
-                           additional_photometric_systems,
-                           overwrite, seed):
+def _check_perform_pop_syn(
+    ebf_file,
+    output_root,
+    iso_dir,
+    bin_edges_number,
+    BH_kick_speed_mean,
+    NS_kick_speed_mean,
+    additional_photometric_systems,
+    overwrite,
+    seed,
+):
     """
     Checks that the inputs of perform_pop_syn are valid
 
@@ -417,58 +479,78 @@ def _check_perform_pop_syn(ebf_file, output_root, iso_dir,
 
     """
 
-    if ebf_file[-4:] != '.ebf':
-        raise Exception('ebf_file (%s) must be an ebf file.' % str(ebf_file))
+    if ebf_file[-4:] != ".ebf":
+        raise Exception("ebf_file (%s) must be an ebf file." % str(ebf_file))
 
     if type(output_root) != str:
-        raise Exception('output_root (%s) must be a string.' % str(output_root))
+        raise Exception("output_root (%s) must be a string." % str(output_root))
 
     if type(iso_dir) != str:
-        raise Exception('iso_dir (%s) must be a string.' % str(iso_dir))
+        raise Exception("iso_dir (%s) must be a string." % str(iso_dir))
 
     if not os.path.exists(iso_dir):
-        raise Exception('iso_dir (%s) must exist' % str(iso_dir))
+        raise Exception("iso_dir (%s) must exist" % str(iso_dir))
 
     if bin_edges_number is not None:
         if type(bin_edges_number) != int:
-            raise Exception('bin_edges_number (%s) must be None or an integer.' % str(bin_edges_number))
+            raise Exception(
+                "bin_edges_number (%s) must be None or an integer."
+                % str(bin_edges_number)
+            )
 
     if type(BH_kick_speed_mean) != int:
         if type(BH_kick_speed_mean) != float:
-            raise Exception('BH_kick_speed_mean (%s) must be an integer or a float.' % str(BH_kick_speed_mean))
+            raise Exception(
+                "BH_kick_speed_mean (%s) must be an integer or a float."
+                % str(BH_kick_speed_mean)
+            )
 
     if type(NS_kick_speed_mean) != int:
         if type(NS_kick_speed_mean) != float:
-            raise Exception('NS_kick_speed_mean (%s) must be an integer or a float.' % str(NS_kick_speed_mean))
+            raise Exception(
+                "NS_kick_speed_mean (%s) must be an integer or a float."
+                % str(NS_kick_speed_mean)
+            )
 
     if type(overwrite) != bool:
-        raise Exception('overwrite (%s) must be a boolean.' % str(overwrite))
+        raise Exception("overwrite (%s) must be a boolean." % str(overwrite))
 
     if seed is not None:
         if type(seed) != int:
-            raise Exception('seed (%s) must be None or an integer.' % str(seed))
+            raise Exception("seed (%s) must be None or an integer." % str(seed))
 
     if additional_photometric_systems is not None:
         if type(additional_photometric_systems) != list:
-            raise Exception('additional_photometric_systems (%s) must '
-                            'either None or a list of strings.' % str(additional_photometric_systems))
+            raise Exception(
+                "additional_photometric_systems (%s) must "
+                "either None or a list of strings."
+                % str(additional_photometric_systems)
+            )
 
         for photometric_system in additional_photometric_systems:
             if photometric_system not in photometric_system_dict:
-                exception_str = 'photometric_system must be a key in ' \
-                                'photometric_system_dict. \n' \
-                                'Acceptable values are : '
+                exception_str = (
+                    "photometric_system must be a key in "
+                    "photometric_system_dict. \n"
+                    "Acceptable values are : "
+                )
                 for photometric_system in photometric_system_dict:
-                    exception_str += '%s, ' % photometric_system
+                    exception_str += "%s, " % photometric_system
                 exception_str = exception_str[:-2]
                 raise Exception(exception_str)
 
 
-def perform_pop_syn(ebf_file, output_root, iso_dir,
-                    bin_edges_number=None,
-                    BH_kick_speed_mean=50, NS_kick_speed_mean=400,
-                    additional_photometric_systems=None,
-                    overwrite=False, seed=None):
+def perform_pop_syn(
+    ebf_file,
+    output_root,
+    iso_dir,
+    bin_edges_number=None,
+    BH_kick_speed_mean=50,
+    NS_kick_speed_mean=400,
+    additional_photometric_systems=None,
+    overwrite=False,
+    seed=None,
+):
     """
     Given some galaxia output, creates compact objects. Sorts the stars and
     compact objects into latitude/longitude bins, and saves them in an HDF5 file.
@@ -541,23 +623,31 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     if not overwrite:
         # Check if HDF5 file exists already. If it does, throw an error message
         # to complain and exit.
-        if os.path.isfile(output_root + '.h5'):
+        if os.path.isfile(output_root + ".h5"):
             raise Exception(
-                'That .h5 file name is taken! Either delete the .h5 file, '
-                'or pick a new name.')
+                "That .h5 file name is taken! Either delete the .h5 file, "
+                "or pick a new name."
+            )
 
         # Ditto with the fits label file.
-        if os.path.isfile(output_root + '_label.fits'):
+        if os.path.isfile(output_root + "_label.fits"):
             raise Exception(
-                'That .fits file name is taken! Either delete the .fits file, '
-                'or pick a new name.')
+                "That .fits file name is taken! Either delete the .fits file, "
+                "or pick a new name."
+            )
 
     # Error handling/complaining if input types are not right.
-    _check_perform_pop_syn(ebf_file, output_root, iso_dir,
-                           bin_edges_number,
-                           BH_kick_speed_mean, NS_kick_speed_mean,
-                           additional_photometric_systems,
-                           overwrite, seed)
+    _check_perform_pop_syn(
+        ebf_file,
+        output_root,
+        iso_dir,
+        bin_edges_number,
+        BH_kick_speed_mean,
+        NS_kick_speed_mean,
+        additional_photometric_systems,
+        overwrite,
+        seed,
+    )
 
     ##########
     # Start of code
@@ -573,9 +663,9 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     # Control yourself... take only what you need from it
     # i.e. the log file, popid, and age
     ########
-    t = ebf.read_ind(ebf_file, '/log', 0)
-    popid_array = ebf.read(ebf_file, '/popid')
-    age_array = ebf.read(ebf_file, '/age')
+    t = ebf.read_ind(ebf_file, "/log", 0)
+    popid_array = ebf.read(ebf_file, "/popid")
+    age_array = ebf.read(ebf_file, "/age")
 
     # Just some counting/error checking things
     n_stars = len(popid_array)  # How many stars from Galaxia
@@ -587,9 +677,9 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     ##########
     ###  Fetch the center point and area of the survey.
     ##########
-    b = float(ebf_log['latitude'])
-    l = float(ebf_log['longitude'])
-    surveyArea = float(ebf_log['surveyArea'])
+    b = float(ebf_log["latitude"])
+    l = float(ebf_log["longitude"])
+    surveyArea = float(ebf_log["surveyArea"])
 
     ##########
     ### Make the bins for the latitude and longitude. All the information
@@ -609,10 +699,8 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     # Make sure we have enough bin edges (minimum is 3)
     if bin_edges_number < 2:
         bin_edges_number = 3
-    lat_bin_edges = np.linspace(b - 1.1 * radius, b + 1.1 * radius,
-                                bin_edges_number)
-    long_bin_edges = np.linspace(l - 1.1 * radius, l + 1.1 * radius,
-                                 bin_edges_number)
+    lat_bin_edges = np.linspace(b - 1.1 * radius, b + 1.1 * radius, bin_edges_number)
+    long_bin_edges = np.linspace(l - 1.1 * radius, l + 1.1 * radius, bin_edges_number)
     # Angle wrapping for longitude
     wrap_id = np.where(long_bin_edges > 180)[0]
     long_bin_edges[wrap_id] -= 360
@@ -621,10 +709,10 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     # Create h5py file to store lat/long binned output and
     # that this hdf5 file was created without / before add_pbh
     ##########
-    h5file = h5py.File(output_root + '.h5', 'w')
-    h5file['lat_bin_edges'] = lat_bin_edges
-    h5file['long_bin_edges'] = long_bin_edges
-    h5file['add_pbh'] = False
+    h5file = h5py.File(output_root + ".h5", "w")
+    h5file["lat_bin_edges"] = lat_bin_edges
+    h5file["long_bin_edges"] = long_bin_edges
+    h5file["add_pbh"] = False
     h5file.close()
 
     ##########
@@ -648,13 +736,13 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     # age ranges and radius ranges.
     ##########
     for pid in range(10):
-        print('*********************** Starting popid ' + str(pid))
+        print("*********************** Starting popid " + str(pid))
         if np.sum(popid_array == pid) == 0:
-            print('No stars with this pid. Skipping!')
+            print("No stars with this pid. Skipping!")
             continue
         popid_idx = np.where(popid_array == pid)[0]
         if len(popid_idx) == 0:
-            print('No stars with this pid. Skipping!')
+            print("No stars with this pid. Skipping!")
             continue
 
         logage_min = np.min(age_array[popid_idx])
@@ -680,13 +768,15 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
         #   duplicated things carried in memory.
         ##########
         for aa in range(len(logt_bins) - 1):
-            print('Starting age bin ', logt_bins[aa])
+            print("Starting age bin ", logt_bins[aa])
             # Mid-point age of bin.
             age_of_bin = (logt_bins[aa] + logt_bins[aa + 1]) / 2.0
 
             # Fetch the stars in this age bin.
-            age_idx = np.where((age_array[popid_idx] >= logt_bins[aa]) &
-                               (age_array[popid_idx] < logt_bins[aa + 1]))[0]
+            age_idx = np.where(
+                (age_array[popid_idx] >= logt_bins[aa])
+                & (age_array[popid_idx] < logt_bins[aa + 1])
+            )[0]
             len_adx = len(age_idx)
 
             # Figure out how many bins we will need.
@@ -705,23 +795,23 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
             exbv_arr4kdt = None
             if len_adx > 0:
                 num_kdtree_samples = int(min(len_adx, 2e6))
-                kdt_idx = np.random.choice(np.arange(len_adx),
-                                           size=num_kdtree_samples,
-                                           replace=False)
+                kdt_idx = np.random.choice(
+                    np.arange(len_adx), size=num_kdtree_samples, replace=False
+                )
                 bin_idx = popid_idx[age_idx[kdt_idx]]
-                star_px = ebf.read_ind(ebf_file, '/px', bin_idx)
-                star_py = ebf.read_ind(ebf_file, '/py', bin_idx)
-                star_pz = ebf.read_ind(ebf_file, '/pz', bin_idx)
+                star_px = ebf.read_ind(ebf_file, "/px", bin_idx)
+                star_py = ebf.read_ind(ebf_file, "/py", bin_idx)
+                star_pz = ebf.read_ind(ebf_file, "/pz", bin_idx)
                 star_xyz = np.array([star_px, star_py, star_pz]).T
                 kdt_star_p = cKDTree(star_xyz)
-                exbv_arr4kdt = ebf.read_ind(ebf_file, '/exbv_schlegel', bin_idx)
+                exbv_arr4kdt = ebf.read_ind(ebf_file, "/exbv_schlegel", bin_idx)
                 del bin_idx, star_px, star_py, star_pz
 
             ##########
             # Loop through bins of 2 million stars at a time.
             ##########
             for nn in range(num_bins):
-                print('Starting sub-bin ', nn)
+                print("Starting sub-bin ", nn)
                 n_start = int(nn * num_stars_in_bin)
                 n_stop = int((nn + 1) * num_stars_in_bin)
 
@@ -731,110 +821,115 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
                 # Fill up star_dict
                 ##########
                 star_dict = {}
-                star_dict['zams_mass'] = ebf.read_ind(ebf_file, '/smass', bin_idx)
-                star_dict['mass'] = ebf.read_ind(ebf_file, '/mact', bin_idx)
-                star_dict['px'] = ebf.read_ind(ebf_file, '/px', bin_idx)
-                star_dict['py'] = ebf.read_ind(ebf_file, '/py', bin_idx)
-                star_dict['pz'] = ebf.read_ind(ebf_file, '/pz', bin_idx)
-                star_dict['vx'] = ebf.read_ind(ebf_file, '/vx', bin_idx)
-                star_dict['vy'] = ebf.read_ind(ebf_file, '/vy', bin_idx)
-                star_dict['vz'] = ebf.read_ind(ebf_file, '/vz', bin_idx)
-                star_dict['age'] = age_array[bin_idx]
-                star_dict['popid'] = popid_array[bin_idx]
-                star_dict['exbv'] = ebf.read_ind(ebf_file, '/exbv_schlegel', bin_idx)
-                star_dict['glat'] = ebf.read_ind(ebf_file, '/glat', bin_idx)
-                star_dict['glon'] = ebf.read_ind(ebf_file, '/glon', bin_idx)
-                star_dict['mbol'] = ebf.read_ind(ebf_file, '/lum', bin_idx)
-                star_dict['grav'] = ebf.read_ind(ebf_file, '/grav', bin_idx)
-                star_dict['teff'] = ebf.read_ind(ebf_file, '/teff', bin_idx)
-                star_dict['feh'] = ebf.read_ind(ebf_file, '/feh', bin_idx)
-                star_dict['rad'] = ebf.read_ind(ebf_file, '/rad', bin_idx)
-                star_dict['rem_id'] = np.zeros(len(bin_idx))
-                star_dict['obj_id'] = np.arange(len(bin_idx)) + n_binned_stars
+                star_dict["zams_mass"] = ebf.read_ind(ebf_file, "/smass", bin_idx)
+                star_dict["mass"] = ebf.read_ind(ebf_file, "/mact", bin_idx)
+                star_dict["px"] = ebf.read_ind(ebf_file, "/px", bin_idx)
+                star_dict["py"] = ebf.read_ind(ebf_file, "/py", bin_idx)
+                star_dict["pz"] = ebf.read_ind(ebf_file, "/pz", bin_idx)
+                star_dict["vx"] = ebf.read_ind(ebf_file, "/vx", bin_idx)
+                star_dict["vy"] = ebf.read_ind(ebf_file, "/vy", bin_idx)
+                star_dict["vz"] = ebf.read_ind(ebf_file, "/vz", bin_idx)
+                star_dict["age"] = age_array[bin_idx]
+                star_dict["popid"] = popid_array[bin_idx]
+                star_dict["exbv"] = ebf.read_ind(ebf_file, "/exbv_schlegel", bin_idx)
+                star_dict["glat"] = ebf.read_ind(ebf_file, "/glat", bin_idx)
+                star_dict["glon"] = ebf.read_ind(ebf_file, "/glon", bin_idx)
+                star_dict["mbol"] = ebf.read_ind(ebf_file, "/lum", bin_idx)
+                star_dict["grav"] = ebf.read_ind(ebf_file, "/grav", bin_idx)
+                star_dict["teff"] = ebf.read_ind(ebf_file, "/teff", bin_idx)
+                star_dict["feh"] = ebf.read_ind(ebf_file, "/feh", bin_idx)
+                star_dict["rad"] = ebf.read_ind(ebf_file, "/rad", bin_idx)
+                star_dict["rem_id"] = np.zeros(len(bin_idx))
+                star_dict["obj_id"] = np.arange(len(bin_idx)) + n_binned_stars
                 n_binned_stars += len(bin_idx)
 
                 ##########
                 # Angle wrapping for longitude
                 ##########
-                wrap_idx = np.where(star_dict['glon'] > 180)[0]
-                star_dict['glon'][wrap_idx] -= 360
+                wrap_idx = np.where(star_dict["glon"] > 180)[0]
+                star_dict["glon"][wrap_idx] -= 360
 
                 ##########
                 # Add UBV magnitudes
                 ##########
-                star_dict['ubv_J'] = ebf.read_ind(ebf_file, '/ubv_J', bin_idx)
-                star_dict['ubv_H'] = ebf.read_ind(ebf_file, '/ubv_H', bin_idx)
-                star_dict['ubv_K'] = ebf.read_ind(ebf_file, '/ubv_K', bin_idx)
-                star_dict['ubv_U'] = ebf.read_ind(ebf_file, '/ubv_U', bin_idx)
-                star_dict['ubv_I'] = ebf.read_ind(ebf_file, '/ubv_I', bin_idx)
-                star_dict['ubv_B'] = ebf.read_ind(ebf_file, '/ubv_B', bin_idx)
-                star_dict['ubv_V'] = ebf.read_ind(ebf_file, '/ubv_V', bin_idx)
-                star_dict['ubv_R'] = ebf.read_ind(ebf_file, '/ubv_R', bin_idx)
+                star_dict["ubv_J"] = ebf.read_ind(ebf_file, "/ubv_J", bin_idx)
+                star_dict["ubv_H"] = ebf.read_ind(ebf_file, "/ubv_H", bin_idx)
+                star_dict["ubv_K"] = ebf.read_ind(ebf_file, "/ubv_K", bin_idx)
+                star_dict["ubv_U"] = ebf.read_ind(ebf_file, "/ubv_U", bin_idx)
+                star_dict["ubv_I"] = ebf.read_ind(ebf_file, "/ubv_I", bin_idx)
+                star_dict["ubv_B"] = ebf.read_ind(ebf_file, "/ubv_B", bin_idx)
+                star_dict["ubv_V"] = ebf.read_ind(ebf_file, "/ubv_V", bin_idx)
+                star_dict["ubv_R"] = ebf.read_ind(ebf_file, "/ubv_R", bin_idx)
 
                 ##########
                 # Add ztf magnitudes
                 ##########
                 if additional_photometric_systems is not None:
-                    if 'ztf' in additional_photometric_systems:
+                    if "ztf" in additional_photometric_systems:
                         # Pull out ubv magnitudes needed for photometric conversions
-                        ubv_b = star_dict['ubv_B']
-                        ubv_v = star_dict['ubv_V']
-                        ubv_r = star_dict['ubv_R']
-                        ubv_i = star_dict['ubv_I']
+                        ubv_b = star_dict["ubv_B"]
+                        ubv_v = star_dict["ubv_V"]
+                        ubv_r = star_dict["ubv_R"]
+                        ubv_i = star_dict["ubv_I"]
 
-                    ztf_g = transform_ubv_to_ztf('g', ubv_b, ubv_v, ubv_r, ubv_i)
-                    ztf_r = transform_ubv_to_ztf('r', ubv_b, ubv_v, ubv_r, ubv_i)
-                    ztf_i = transform_ubv_to_ztf('i', ubv_b, ubv_v, ubv_r, ubv_i)
-                    star_dict['ztf_g'] = ztf_g
-                    star_dict['ztf_r'] = ztf_r
-                    star_dict['ztf_i'] = ztf_i
+                    ztf_g = transform_ubv_to_ztf("g", ubv_b, ubv_v, ubv_r, ubv_i)
+                    ztf_r = transform_ubv_to_ztf("r", ubv_b, ubv_v, ubv_r, ubv_i)
+                    ztf_i = transform_ubv_to_ztf("i", ubv_b, ubv_v, ubv_r, ubv_i)
+                    star_dict["ztf_g"] = ztf_g
+                    star_dict["ztf_r"] = ztf_r
+                    star_dict["ztf_i"] = ztf_i
 
                 ##########
                 # Add spherical velocities vr, mu_b, mu_lcosb
                 ##########
-                vr, mu_b, mu_lcosb = calc_sph_motion(star_dict['vx'],
-                                                     star_dict['vy'],
-                                                     star_dict['vz'],
-                                                     star_dict['rad'],
-                                                     star_dict['glat'],
-                                                     star_dict['glon'])
+                vr, mu_b, mu_lcosb = calc_sph_motion(
+                    star_dict["vx"],
+                    star_dict["vy"],
+                    star_dict["vz"],
+                    star_dict["rad"],
+                    star_dict["glat"],
+                    star_dict["glon"],
+                )
                 #########
                 # Add precision to r, b, l, vr, mu_b, mu_lcosb
                 #########
-                star_dict['rad'] = utils.add_precision64(star_dict['rad'], -4)
-                star_dict['glat'] = utils.add_precision64(star_dict['glat'], -4)
-                star_dict['glon'] = utils.add_precision64(star_dict['glon'], -4)
-                star_dict['vr'] = utils.add_precision64(vr, -4)
-                star_dict['mu_b'] = utils.add_precision64(mu_b, -4)
-                star_dict['mu_lcosb'] = utils.add_precision64(mu_lcosb, -4)
+                star_dict["rad"] = utils.add_precision64(star_dict["rad"], -4)
+                star_dict["glat"] = utils.add_precision64(star_dict["glat"], -4)
+                star_dict["glon"] = utils.add_precision64(star_dict["glon"], -4)
+                star_dict["vr"] = utils.add_precision64(vr, -4)
+                star_dict["mu_b"] = utils.add_precision64(mu_b, -4)
+                star_dict["mu_lcosb"] = utils.add_precision64(mu_lcosb, -4)
 
                 ##########
                 # Perform population synthesis.
                 ##########
-                mass_in_bin = np.sum(star_dict['zams_mass'])
+                mass_in_bin = np.sum(star_dict["zams_mass"])
 
                 stars_in_bin = {}
                 for key, val in star_dict.items():
                     stars_in_bin[key] = val
 
-                comp_dict, next_id = _make_comp_dict(iso_dir, age_of_bin,
-                                                     mass_in_bin, stars_in_bin, next_id,
-                                                     kdt_star_p, exbv_arr4kdt,
-                                                     BH_kick_speed_mean=BH_kick_speed_mean,
-                                                     NS_kick_speed_mean=NS_kick_speed_mean,
-                                                     additional_photometric_systems=additional_photometric_systems,
-                                                     seed=seed)
+                comp_dict, next_id = _make_comp_dict(
+                    iso_dir,
+                    age_of_bin,
+                    mass_in_bin,
+                    stars_in_bin,
+                    next_id,
+                    kdt_star_p,
+                    exbv_arr4kdt,
+                    BH_kick_speed_mean=BH_kick_speed_mean,
+                    NS_kick_speed_mean=NS_kick_speed_mean,
+                    additional_photometric_systems=additional_photometric_systems,
+                    seed=seed,
+                )
 
                 ##########
                 #  Bin in l, b all stars and compact objects.
                 ##########
                 if comp_dict is not None:
-                    comp_counter += len(comp_dict['mass'])
-                    _bin_lb_hdf5(lat_bin_edges, long_bin_edges,
-                                 comp_dict, output_root)
-                _bin_lb_hdf5(lat_bin_edges, long_bin_edges,
-                             stars_in_bin,
-                             output_root)
+                    comp_counter += len(comp_dict["mass"])
+                    _bin_lb_hdf5(lat_bin_edges, long_bin_edges, comp_dict, output_root)
+                _bin_lb_hdf5(lat_bin_edges, long_bin_edges, stars_in_bin, output_root)
                 ##########
                 # Done with galaxia output in dictionary t and ebf_log.
                 # Garbage collect in order to save space.
@@ -844,15 +939,15 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
             del kdt_star_p, exbv_arr4kdt
 
     t1 = time.time()
-    print('perform_pop_syn runtime : {0:f} s'.format(t1 - t0))
+    print("perform_pop_syn runtime : {0:f} s".format(t1 - t0))
 
     ##########
     # Figure out how much stuff got binned.
     ##########
     binned_counter = 0
-    hf = h5py.File(output_root + '.h5', 'r')
+    hf = h5py.File(output_root + ".h5", "r")
     for key in hf:
-        if 'bin_edges' not in key and 'add_pbh' not in key:
+        if "bin_edges" not in key and "add_pbh" not in key:
             binned_counter += len(hf[key])
 
     ##########
@@ -866,63 +961,95 @@ def perform_pop_syn(ebf_file, output_root, iso_dir,
     now = datetime.datetime.now()
     popsycle_path = os.path.dirname(inspect.getfile(perform_pop_syn))
     popstar_path = os.path.dirname(inspect.getfile(imf))
-    popsycle_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                             cwd=popsycle_path).decode('ascii').strip()
-    popstar_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                           cwd=popstar_path).decode('ascii').strip()
-    dash_line = '-----------------------------' + '\n'
-    empty_line = '\n'
+    popsycle_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popsycle_path)
+        .decode("ascii")
+        .strip()
+    )
+    popstar_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popstar_path)
+        .decode("ascii")
+        .strip()
+    )
+    dash_line = "-----------------------------" + "\n"
+    empty_line = "\n"
 
-    line0 = 'FUNCTION INPUT PARAMETERS' + '\n'
-    line1 = 'ebf_file , ' + ebf_file + '\n'
-    line2 = 'output_root , ' + output_root + '\n'
-    line3 = 'bin_edges_number , ' + str(bin_edges_number) + '\n'
-    line4 = 'BH_kick_speed_mean , ' + str(BH_kick_speed_mean) + ' , (km/s)' + '\n'
-    line5 = 'NS_kick_speed_mean , ' + str(NS_kick_speed_mean) + ' , (km/s)' + '\n'
-    line6 = 'iso_dir , ' + iso_dir + '\n'
-    line7 = 'seed , ' + str(seed) + '\n'
+    line0 = "FUNCTION INPUT PARAMETERS" + "\n"
+    line1 = "ebf_file , " + ebf_file + "\n"
+    line2 = "output_root , " + output_root + "\n"
+    line3 = "bin_edges_number , " + str(bin_edges_number) + "\n"
+    line4 = "BH_kick_speed_mean , " + str(BH_kick_speed_mean) + " , (km/s)" + "\n"
+    line5 = "NS_kick_speed_mean , " + str(NS_kick_speed_mean) + " , (km/s)" + "\n"
+    line6 = "iso_dir , " + iso_dir + "\n"
+    line7 = "seed , " + str(seed) + "\n"
 
-    line8 = 'VERSION INFORMATION' + '\n'
-    line9 = str(now) + ' : creation date' + '\n'
-    line10 = popstar_hash + ' : PopStar commit' + '\n'
-    line11 = popsycle_hash + ' : PopSyCLE commit' + '\n'
+    line8 = "VERSION INFORMATION" + "\n"
+    line9 = str(now) + " : creation date" + "\n"
+    line10 = popstar_hash + " : PopStar commit" + "\n"
+    line11 = popsycle_hash + " : PopSyCLE commit" + "\n"
 
-    line12 = 'OTHER INFORMATION' + '\n'
-    line13 = str(t1 - t0) + ' : total runtime (s)' + '\n'
-    line14 = str(n_stars) + ' : total stars from Galaxia' + '\n'
-    line15 = str(comp_counter) + ' : total compact objects made' + '\n'
-    line16 = str(binned_counter) + ' : total things binned' + '\n'
+    line12 = "OTHER INFORMATION" + "\n"
+    line13 = str(t1 - t0) + " : total runtime (s)" + "\n"
+    line14 = str(n_stars) + " : total stars from Galaxia" + "\n"
+    line15 = str(comp_counter) + " : total compact objects made" + "\n"
+    line16 = str(binned_counter) + " : total things binned" + "\n"
 
-    line17 = 'FILES CREATED' + '\n'
-    line18 = output_root + '.h5 : HDF5 file' + '\n'
-    line19 = output_root + '_label.fits : label file' + '\n'
+    line17 = "FILES CREATED" + "\n"
+    line18 = output_root + ".h5 : HDF5 file" + "\n"
+    line19 = output_root + "_label.fits : label file" + "\n"
 
-    with open(output_root + '_perform_pop_syn.log', 'w') as out:
-        out.writelines([line0, dash_line, line1, line2, line3, line4, line5,
-                        line6, line7, empty_line, line8, dash_line, line9,
-                        line10, line11, empty_line, line12, dash_line, line13,
-                        line14, line15, line16, empty_line, line17, dash_line,
-                        line18, line19])
+    with open(output_root + "_perform_pop_syn.log", "w") as out:
+        out.writelines(
+            [
+                line0,
+                dash_line,
+                line1,
+                line2,
+                line3,
+                line4,
+                line5,
+                line6,
+                line7,
+                empty_line,
+                line8,
+                dash_line,
+                line9,
+                line10,
+                line11,
+                empty_line,
+                line12,
+                dash_line,
+                line13,
+                line14,
+                line15,
+                line16,
+                empty_line,
+                line17,
+                dash_line,
+                line18,
+                line19,
+            ]
+        )
 
     ##########
     # Informative print statements.
     ##########
     if (n_stars + comp_counter) != binned_counter:
-        print('***************** WARNING ******************')
-        print('Number of things in != number of things out.')
-        print('********************************************')
+        print("***************** WARNING ******************")
+        print("Number of things in != number of things out.")
+        print("********************************************")
 
-    print('******************** INFO **********************')
-    print('Total number of stars from Galaxia: ' + str(n_stars))
-    print('Total number of compact objects made: ' + str(comp_counter))
-    print('Total number of things binned: ' + str(binned_counter))
+    print("******************** INFO **********************")
+    print("Total number of stars from Galaxia: " + str(n_stars))
+    print("Total number of compact objects made: " + str(comp_counter))
+    print("Total number of things binned: " + str(binned_counter))
 
     return
 
 
-def calc_current_initial_ratio(iso_dir,
-                               out_file='current_initial_stellar_mass_ratio.txt',
-                               seed=None):
+def calc_current_initial_ratio(
+    iso_dir, out_file="current_initial_stellar_mass_ratio.txt", seed=None
+):
     """
     Makes 10**7 M_sun clusters in PopStar at various ages, to calculate the
     ratio of current to initial cluster mass. The range of ages goes
@@ -953,9 +1080,10 @@ def calc_current_initial_ratio(iso_dir,
     """
     # Set up the input information for PopStar to make a cluster.
     # age in log(age/yr)
-    logage_vec = np.concatenate((np.arange(5.01, 10.01 + 0.005, 0.2),
-                                 np.array([10.04, 10.14])))
-    cluster_mass = 10 ** 7  # mass in m_sol
+    logage_vec = np.concatenate(
+        (np.arange(5.01, 10.01 + 0.005, 0.2), np.array([10.04, 10.14]))
+    )
+    cluster_mass = 10**7  # mass in m_sol
     # IMF power law boundaries. changed start from 0.08 to 0.1 because of MIST.
     mass_limits = np.array([0.1, 0.5, 120])
     # IMF powers
@@ -966,25 +1094,30 @@ def calc_current_initial_ratio(iso_dir,
     # Run all the clusters for the different ages in logage_vec
     for i in range(len(logage_vec)):
         # make isochrone
-        my_iso = synthetic.IsochronePhot(logage_vec[i], 0, 10,
-                                         evo_model=evolution.MISTv1(),
-                                         filters=all_filt_list,
-                                         iso_dir=iso_dir)
+        my_iso = synthetic.IsochronePhot(
+            logage_vec[i],
+            0,
+            10,
+            evo_model=evolution.MISTv1(),
+            filters=all_filt_list,
+            iso_dir=iso_dir,
+        )
 
         # define IMF
         trunc_kroupa = imf.IMF_broken_powerlaw(mass_limits, powers)
         # make cluster
-        cluster = synthetic.ResolvedCluster(my_iso, trunc_kroupa, cluster_mass,
-                                            seed=seed)
+        cluster = synthetic.ResolvedCluster(
+            my_iso, trunc_kroupa, cluster_mass, seed=seed
+        )
         output = cluster.star_systems
 
         # Find the stars in MIST not in Galaxia (i.e. WDs)
         # and figure out how much mass they contribute
-        bad_idx = np.where(output['phase'] == 101)[0]
-        bad_mass = np.sum(output['mass'][bad_idx])  # in m_sol
+        bad_idx = np.where(output["phase"] == 101)[0]
+        bad_mass = np.sum(output["mass"][bad_idx])  # in m_sol
 
         # Figure out the current mass (stars + post-AGB stars)
-        current_mass = np.sum(output['mass'])  # in m_sol
+        current_mass = np.sum(output["mass"])  # in m_sol
 
         # Figure out the current STELLAR mass (no post-AGB stars)
         # This is what we want for the ratio
@@ -998,7 +1131,9 @@ def calc_current_initial_ratio(iso_dir,
 
     # Reshape vectors so they can be concatenated into two columns
     logage_vec = logage_vec.reshape((len(logage_vec), 1))
-    current_initial_ratio_array = current_initial_ratio_array.reshape((len(logage_vec), 1))
+    current_initial_ratio_array = current_initial_ratio_array.reshape(
+        (len(logage_vec), 1)
+    )
     tab = np.concatenate((logage_vec, current_initial_ratio_array), axis=1)
     np.savetxt(out_file, tab)
 
@@ -1040,8 +1175,7 @@ def current_initial_ratio(logage, ratio_file, iso_dir, seed=None):
         try:
             boop = np.loadtxt(ratio_file)
         except Exception as e:
-            calc_current_initial_ratio(iso_dir=iso_dir, out_file=ratio_file,
-                                       seed=seed)
+            calc_current_initial_ratio(iso_dir=iso_dir, out_file=ratio_file, seed=seed)
             boop = np.loadtxt(ratio_file)
 
         logage_vec = boop[:, 0]
@@ -1051,12 +1185,19 @@ def current_initial_ratio(logage, ratio_file, iso_dir, seed=None):
     return _Mclust_v_age_func(logage)
 
 
-def _make_comp_dict(iso_dir, log_age, currentClusterMass,
-                    star_dict, next_id,
-                    kdt_star_p, exbv_arr4kdt,
-                    BH_kick_speed_mean=50, NS_kick_speed_mean=400,
-                    additional_photometric_systems=None,
-                    seed=None):
+def _make_comp_dict(
+    iso_dir,
+    log_age,
+    currentClusterMass,
+    star_dict,
+    next_id,
+    kdt_star_p,
+    exbv_arr4kdt,
+    BH_kick_speed_mean=50,
+    NS_kick_speed_mean=400,
+    additional_photometric_systems=None,
+    seed=None,
+):
     """
     Perform population synthesis.
 
@@ -1123,8 +1264,8 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
     # contains photometric systems
     my_filt_list = copy.deepcopy(all_filt_list)
     if additional_photometric_systems is not None:
-        if 'ztf' in additional_photometric_systems:
-            my_filt_list += ['ztf,g', 'ztf,r', 'ztf,i']
+        if "ztf" in additional_photometric_systems:
+            my_filt_list += ["ztf,g", "ztf,r", "ztf,i"]
 
     # Calculate the initial cluster mass
     # changed from 0.08 to 0.1 at start because MIST can't handle.
@@ -1132,11 +1273,10 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
     powers = np.array([-1.3, -2.3])
     # my_ifmr = ifmr.IFMR()
     my_ifmr = ifmr.IFMR_Raithel18()
-    ratio_file = '%s/current_initial_stellar_mass_ratio.txt' % iso_dir
-    ratio = current_initial_ratio(logage=log_age,
-                                  ratio_file=ratio_file,
-                                  iso_dir=iso_dir,
-                                  seed=seed)
+    ratio_file = "%s/current_initial_stellar_mass_ratio.txt" % iso_dir
+    ratio = current_initial_ratio(
+        logage=log_age, ratio_file=ratio_file, iso_dir=iso_dir, seed=seed
+    )
     initialClusterMass = currentClusterMass / ratio
 
     ##########
@@ -1148,30 +1288,38 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
         # -- arbitrarily chose AKs = 0, distance = 10 pc
         # (irrelevant, photometry not used)
         # Using MIST models to get white dwarfs
-        my_iso = synthetic.IsochronePhot(log_age, 0, 10,
-                                         evo_model=evolution.MISTv1(),
-                                         filters=my_filt_list,
-                                         iso_dir=iso_dir)
+        my_iso = synthetic.IsochronePhot(
+            log_age,
+            0,
+            10,
+            evo_model=evolution.MISTv1(),
+            filters=my_filt_list,
+            iso_dir=iso_dir,
+        )
 
         # Check that the isochrone has all of the filters in filt_list
         # If not, force recreating the isochrone with recomp=True
-        my_iso_filters = [f for f in my_iso.points.colnames if 'm_' in f]
-        my_filt_list_fmt = ['m_%s' % f.replace(',', '_') for f in my_filt_list]
+        my_iso_filters = [f for f in my_iso.points.colnames if "m_" in f]
+        my_filt_list_fmt = ["m_%s" % f.replace(",", "_") for f in my_filt_list]
         if len(set(my_filt_list_fmt) - set(my_iso_filters)) > 0:
-            my_iso = synthetic.IsochronePhot(log_age, 0, 10,
-                                             evo_model=evolution.MISTv1(),
-                                             filters=my_filt_list,
-                                             iso_dir=iso_dir,
-                                             recomp=True)
+            my_iso = synthetic.IsochronePhot(
+                log_age,
+                0,
+                10,
+                evo_model=evolution.MISTv1(),
+                filters=my_filt_list,
+                iso_dir=iso_dir,
+                recomp=True,
+            )
 
         # !!! Keep trunc_kroupa out here !!! Death and destruction otherwise.
         # DON'T MOVE IT OUT!
         trunc_kroupa = imf.IMF_broken_powerlaw(massLimits, powers)
 
         # MAKE cluster
-        cluster = synthetic.ResolvedCluster(my_iso, trunc_kroupa,
-                                            initialClusterMass, ifmr=my_ifmr,
-                                            seed=seed)
+        cluster = synthetic.ResolvedCluster(
+            my_iso, trunc_kroupa, initialClusterMass, ifmr=my_ifmr, seed=seed
+        )
         output = cluster.star_systems
 
         # Create the PopStar table with just compact objects
@@ -1181,28 +1329,40 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
         # -1: PMS, 0: MS, 2: RGB, 3: CHeB, 4: EAGB, 5: TPAGB, 9: WR
         # WE CONSIDER EVERYTHING FROM THE MIST MODELS
         # WITH PHASE 6 (postAGB) TO BE WHITE DWARFS
-        compact_ID = np.where((output['phase'] == 101) |
-                              (output['phase'] == 102) |
-                              (output['phase'] == 103))[0]
+        compact_ID = np.where(
+            (output["phase"] == 101)
+            | (output["phase"] == 102)
+            | (output["phase"] == 103)
+        )[0]
         comp_table = output[compact_ID]
 
         # Removes unused columns to conserve memory.
-        keep_columns = ['mass', 'phase', 'mass_current', 'm_ubv_I', 'm_ubv_R',
-                        'm_ubv_B', 'm_ubv_U', 'm_ubv_V', 'm_ukirt_H',
-                        'm_ukirt_J', 'm_ukirt_K']
+        keep_columns = [
+            "mass",
+            "phase",
+            "mass_current",
+            "m_ubv_I",
+            "m_ubv_R",
+            "m_ubv_B",
+            "m_ubv_U",
+            "m_ubv_V",
+            "m_ukirt_H",
+            "m_ukirt_J",
+            "m_ukirt_K",
+        ]
         if additional_photometric_systems is not None:
-            if 'ztf' in additional_photometric_systems:
-                keep_columns += ['m_ztf_g', 'm_ztf_r', 'm_ztf_i']
+            if "ztf" in additional_photometric_systems:
+                keep_columns += ["m_ztf_g", "m_ztf_r", "m_ztf_i"]
         comp_table.keep_columns(keep_columns)
 
         # Fill out the rest of comp_dict
-        if len(comp_table['mass']) > 0:
+        if len(comp_table["mass"]) > 0:
 
             # Turn astropy table into dictionary to conserve memory.
             comp_dict = {}
-            comp_dict['mass'] = comp_table['mass_current'].data
-            comp_dict['rem_id'] = comp_table['phase'].data
-            comp_dict['zams_mass'] = comp_table['mass'].data
+            comp_dict["mass"] = comp_table["mass_current"].data
+            comp_dict["rem_id"] = comp_table["phase"].data
+            comp_dict["zams_mass"] = comp_table["mass"].data
 
             ##########
             # Assign spherical positions and velocities to all compact objects.
@@ -1210,29 +1370,35 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
             # Create velocities and positions using Kernel Density Estimation
             # Galactic position (r, l, b)
             # and heliocentric velocity (vx, vy, vz)
-            kde_in_data = np.array([star_dict['rad'], star_dict['glat'],
-                                    star_dict['glon'], star_dict['vx'],
-                                    star_dict['vy'], star_dict['vz']]).T
+            kde_in_data = np.array(
+                [
+                    star_dict["rad"],
+                    star_dict["glat"],
+                    star_dict["glon"],
+                    star_dict["vx"],
+                    star_dict["vy"],
+                    star_dict["vz"],
+                ]
+            ).T
             # .T because kde.fit needs the rows/columns this way.
             kde = neighbors.KernelDensity(bandwidth=0.0001)
             kde.fit(kde_in_data)
 
-            kde_out_data = kde.sample(len(comp_dict['mass']),
-                                      random_state=seed)
-            comp_dict['rad'] = kde_out_data[:, 0]
-            comp_dict['glat'] = kde_out_data[:, 1]
-            comp_dict['glon'] = kde_out_data[:, 2]
-            comp_dict['vx'] = kde_out_data[:, 3]
-            comp_dict['vy'] = kde_out_data[:, 4]
-            comp_dict['vz'] = kde_out_data[:, 5]
+            kde_out_data = kde.sample(len(comp_dict["mass"]), random_state=seed)
+            comp_dict["rad"] = kde_out_data[:, 0]
+            comp_dict["glat"] = kde_out_data[:, 1]
+            comp_dict["glon"] = kde_out_data[:, 2]
+            comp_dict["vx"] = kde_out_data[:, 3]
+            comp_dict["vy"] = kde_out_data[:, 4]
+            comp_dict["vz"] = kde_out_data[:, 5]
 
             ##########
             # Assign x, y, z position.
             ##########
-            comp_helio = galactic_to_heliocentric(comp_dict['rad'],
-                                                  comp_dict['glat'],
-                                                  comp_dict['glon'])
-            comp_dict['px'], comp_dict['py'], comp_dict['pz'] = comp_helio
+            comp_helio = galactic_to_heliocentric(
+                comp_dict["rad"], comp_dict["glat"], comp_dict["glon"]
+            )
+            comp_dict["px"], comp_dict["py"], comp_dict["pz"] = comp_helio
 
             ##########
             # Add kicks to NSs and BHs.
@@ -1244,70 +1410,76 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
             # Here we calculate the scipy.stats `scale` by dividing the
             # user defined mean by the Maxwellian mean.
 
-            NS_idx = np.where(comp_dict['rem_id'] == 102)[0]
-            NS_kick_speed_scale = NS_kick_speed_mean / (2*np.sqrt(2/np.pi))
+            NS_idx = np.where(comp_dict["rem_id"] == 102)[0]
+            NS_kick_speed_scale = NS_kick_speed_mean / (2 * np.sqrt(2 / np.pi))
             if len(NS_idx) > 0:
-                NS_kick_speed = maxwell.rvs(loc=0, scale=NS_kick_speed_scale, size=len(NS_idx))
+                NS_kick_speed = maxwell.rvs(
+                    loc=0, scale=NS_kick_speed_scale, size=len(NS_idx)
+                )
                 NS_kick = utils.sample_spherical(len(NS_idx), NS_kick_speed)
-                comp_dict['vx'][NS_idx] += NS_kick[0]
-                comp_dict['vy'][NS_idx] += NS_kick[1]
-                comp_dict['vz'][NS_idx] += NS_kick[2]
+                comp_dict["vx"][NS_idx] += NS_kick[0]
+                comp_dict["vy"][NS_idx] += NS_kick[1]
+                comp_dict["vz"][NS_idx] += NS_kick[2]
 
-            BH_idx = np.where(comp_dict['rem_id'] == 103)[0]
-            BH_kick_speed_scale = BH_kick_speed_mean / (2*np.sqrt(2/np.pi))
+            BH_idx = np.where(comp_dict["rem_id"] == 103)[0]
+            BH_kick_speed_scale = BH_kick_speed_mean / (2 * np.sqrt(2 / np.pi))
             if len(BH_idx) > 0:
-                BH_kick_speed = maxwell.rvs(loc=0, scale=BH_kick_speed_scale, size=len(BH_idx))
+                BH_kick_speed = maxwell.rvs(
+                    loc=0, scale=BH_kick_speed_scale, size=len(BH_idx)
+                )
                 BH_kick = utils.sample_spherical(len(BH_idx), BH_kick_speed)
-                comp_dict['vx'][BH_idx] += BH_kick[0]
-                comp_dict['vy'][BH_idx] += BH_kick[1]
-                comp_dict['vz'][BH_idx] += BH_kick[2]
+                comp_dict["vx"][BH_idx] += BH_kick[0]
+                comp_dict["vy"][BH_idx] += BH_kick[1]
+                comp_dict["vz"][BH_idx] += BH_kick[2]
 
             # Add precision to r, b, l
-            comp_dict['rad'] = utils.add_precision64(comp_dict['rad'], -4)
-            comp_dict['glat'] = utils.add_precision64(comp_dict['glat'], -4)
-            comp_dict['glon'] = utils.add_precision64(comp_dict['glon'], -4)
+            comp_dict["rad"] = utils.add_precision64(comp_dict["rad"], -4)
+            comp_dict["glat"] = utils.add_precision64(comp_dict["glat"], -4)
+            comp_dict["glon"] = utils.add_precision64(comp_dict["glon"], -4)
 
             # Assign vr, mu_b, mu_lcosb.
-            comp_sph = calc_sph_motion(comp_dict['vx'],
-                                       comp_dict['vy'],
-                                       comp_dict['vz'],
-                                       comp_dict['rad'],
-                                       comp_dict['glat'],
-                                       comp_dict['glon'])
-            comp_dict['vr'], comp_dict['mu_b'], comp_dict['mu_lcosb'] = comp_sph
+            comp_sph = calc_sph_motion(
+                comp_dict["vx"],
+                comp_dict["vy"],
+                comp_dict["vz"],
+                comp_dict["rad"],
+                comp_dict["glat"],
+                comp_dict["glon"],
+            )
+            comp_dict["vr"], comp_dict["mu_b"], comp_dict["mu_lcosb"] = comp_sph
 
             # Add precision to vr, mu_b, mu_lcosb
-            comp_dict['vr'] = utils.add_precision64(comp_dict['vr'], -4)
-            comp_dict['mu_b'] = utils.add_precision64(comp_dict['mu_b'], -4)
-            comp_dict['mu_lcosb'] = utils.add_precision64(comp_dict['mu_lcosb'], -4)
+            comp_dict["vr"] = utils.add_precision64(comp_dict["vr"], -4)
+            comp_dict["mu_b"] = utils.add_precision64(comp_dict["mu_b"], -4)
+            comp_dict["mu_lcosb"] = utils.add_precision64(comp_dict["mu_lcosb"], -4)
 
             # Assign age.
-            comp_dict['age'] = log_age * np.ones(len(comp_dict['vx']))
+            comp_dict["age"] = log_age * np.ones(len(comp_dict["vx"]))
 
             ##########
             # Initialize values for compact object photometry.
             # All of the values are np.nan
             # These are all the outputs from the IFMR of Raithel and Kalirai.
             ##########
-            comp_dict['exbv'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_I'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_K'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_J'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_U'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_R'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_B'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_V'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['ubv_H'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['teff'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['grav'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['mbol'] = np.full(len(comp_dict['vx']), np.nan)
-            comp_dict['feh'] = np.full(len(comp_dict['vx']), np.nan)
+            comp_dict["exbv"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_I"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_K"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_J"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_U"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_R"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_B"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_V"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["ubv_H"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["teff"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["grav"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["mbol"] = np.full(len(comp_dict["vx"]), np.nan)
+            comp_dict["feh"] = np.full(len(comp_dict["vx"]), np.nan)
 
             if additional_photometric_systems is not None:
-                if 'ztf' in additional_photometric_systems:
-                    comp_dict['ztf_g'] = np.full(len(comp_dict['vx']), np.nan)
-                    comp_dict['ztf_r'] = np.full(len(comp_dict['vx']), np.nan)
-                    comp_dict['ztf_i'] = np.full(len(comp_dict['vx']), np.nan)
+                if "ztf" in additional_photometric_systems:
+                    comp_dict["ztf_g"] = np.full(len(comp_dict["vx"]), np.nan)
+                    comp_dict["ztf_r"] = np.full(len(comp_dict["vx"]), np.nan)
+                    comp_dict["ztf_i"] = np.full(len(comp_dict["vx"]), np.nan)
 
             ##########
             # FIX THE BAD PHOTOMETRY FOR LUMINOUS WHITE DWARFS
@@ -1315,41 +1487,57 @@ def _make_comp_dict(iso_dir, log_age, currentClusterMass,
             # Approximate extinction from the nearest (in 3-D space) star.
             # Get WD photometry from MIST models.
             ##########
-            lum_WD_idx = np.argwhere(~np.isnan(comp_table['m_ubv_I']))
+            lum_WD_idx = np.argwhere(~np.isnan(comp_table["m_ubv_I"]))
 
             if len(lum_WD_idx) > 0:
                 # The extinction to the luminous white dwarfs is calculated
                 # by finding the nearest star in the pop_id / age_bin KDTree
                 # to the compact object and copying that star's extinction.
-                comp_xyz = np.array([comp_dict['px'][lum_WD_idx],
-                                     comp_dict['py'][lum_WD_idx],
-                                     comp_dict['pz'][lum_WD_idx]]).T
+                comp_xyz = np.array(
+                    [
+                        comp_dict["px"][lum_WD_idx],
+                        comp_dict["py"][lum_WD_idx],
+                        comp_dict["pz"][lum_WD_idx],
+                    ]
+                ).T
                 dist, indices = kdt_star_p.query(comp_xyz)
-                comp_dict['exbv'][lum_WD_idx] = exbv_arr4kdt[indices.T]
+                comp_dict["exbv"][lum_WD_idx] = exbv_arr4kdt[indices.T]
 
-                comp_dict['ubv_I'][lum_WD_idx] = comp_table['m_ubv_I'][lum_WD_idx].data
-                comp_dict['ubv_K'][lum_WD_idx] = comp_table['m_ukirt_K'][lum_WD_idx].data
-                comp_dict['ubv_J'][lum_WD_idx] = comp_table['m_ukirt_J'][lum_WD_idx].data
-                comp_dict['ubv_U'][lum_WD_idx] = comp_table['m_ubv_U'][lum_WD_idx].data
-                comp_dict['ubv_R'][lum_WD_idx] = comp_table['m_ubv_R'][lum_WD_idx].data
-                comp_dict['ubv_B'][lum_WD_idx] = comp_table['m_ubv_B'][lum_WD_idx].data
-                comp_dict['ubv_V'][lum_WD_idx] = comp_table['m_ubv_V'][lum_WD_idx].data
-                comp_dict['ubv_H'][lum_WD_idx] = comp_table['m_ukirt_H'][lum_WD_idx].data
+                comp_dict["ubv_I"][lum_WD_idx] = comp_table["m_ubv_I"][lum_WD_idx].data
+                comp_dict["ubv_K"][lum_WD_idx] = comp_table["m_ukirt_K"][
+                    lum_WD_idx
+                ].data
+                comp_dict["ubv_J"][lum_WD_idx] = comp_table["m_ukirt_J"][
+                    lum_WD_idx
+                ].data
+                comp_dict["ubv_U"][lum_WD_idx] = comp_table["m_ubv_U"][lum_WD_idx].data
+                comp_dict["ubv_R"][lum_WD_idx] = comp_table["m_ubv_R"][lum_WD_idx].data
+                comp_dict["ubv_B"][lum_WD_idx] = comp_table["m_ubv_B"][lum_WD_idx].data
+                comp_dict["ubv_V"][lum_WD_idx] = comp_table["m_ubv_V"][lum_WD_idx].data
+                comp_dict["ubv_H"][lum_WD_idx] = comp_table["m_ukirt_H"][
+                    lum_WD_idx
+                ].data
                 if additional_photometric_systems is not None:
-                    if 'ztf' in additional_photometric_systems:
-                        comp_dict['ztf_g'][lum_WD_idx] = comp_table['m_ztf_g'][lum_WD_idx].data
-                        comp_dict['ztf_r'][lum_WD_idx] = comp_table['m_ztf_r'][lum_WD_idx].data
-                        comp_dict['ztf_i'][lum_WD_idx] = comp_table['m_ztf_i'][lum_WD_idx].data
+                    if "ztf" in additional_photometric_systems:
+                        comp_dict["ztf_g"][lum_WD_idx] = comp_table["m_ztf_g"][
+                            lum_WD_idx
+                        ].data
+                        comp_dict["ztf_r"][lum_WD_idx] = comp_table["m_ztf_r"][
+                            lum_WD_idx
+                        ].data
+                        comp_dict["ztf_i"][lum_WD_idx] = comp_table["m_ztf_i"][
+                            lum_WD_idx
+                        ].data
 
                 # Memory cleaning
                 del comp_table
                 gc.collect()
 
             # Assign population and object ID.
-            comp_dict['popid'] = star_dict['popid'][0] * np.ones(len(comp_dict['vx']))
-            comp_dict['obj_id'] = np.arange(len(comp_dict['vx'])) + next_id
+            comp_dict["popid"] = star_dict["popid"][0] * np.ones(len(comp_dict["vx"]))
+            comp_dict["obj_id"] = np.arange(len(comp_dict["vx"])) + next_id
 
-            next_id += len(comp_dict['vx'])
+            next_id += len(comp_dict["vx"])
 
     else:
         comp_dict = None
@@ -1377,12 +1565,12 @@ def _generate_comp_dtype(obj_arr):
 
     comp_dtype_arr = []
     for key in obj_arr:
-        if key in ['rem_id', 'popid']:  # int16 (up to 32767)
-            d = (key, 'i2')
-        elif key in ['obj_id']:  # int32 (up to 2147483647)
-            d = (key, 'i4')
+        if key in ["rem_id", "popid"]:  # int16 (up to 32767)
+            d = (key, "i2")
+        elif key in ["obj_id"]:  # int32 (up to 2147483647)
+            d = (key, "i4")
         else:
-            d = (key, 'f8')  # float64
+            d = (key, "f8")  # float64
         comp_dtype_arr.append(d)
     comp_dtype = np.dtype(comp_dtype_arr)
     return comp_dtype
@@ -1434,17 +1622,20 @@ def _bin_lb_hdf5(lat_bin_edges, long_bin_edges, obj_arr, output_root):
         for bb in range(len(lat_bin_edges) - 1):
             # Open our HDF5 file for reading and appending.
             # Create as necessary.
-            hf = h5py.File(output_root + '.h5', 'r+')
+            hf = h5py.File(output_root + ".h5", "r+")
 
             # HDF5 dataset name
-            dset_name = 'l' + str(ll) + 'b' + str(bb)
+            dset_name = "l" + str(ll) + "b" + str(bb)
 
             # Create data set if needed. Start with 0 stars in the dataset.
             if dset_name not in hf:
-                dataset = hf.create_dataset(dset_name, shape=(0,),
-                                            chunks=(1e4,),
-                                            maxshape=(None,),
-                                            dtype=comp_dtype)
+                dataset = hf.create_dataset(
+                    dset_name,
+                    shape=(0,),
+                    chunks=(1e4,),
+                    maxshape=(None,),
+                    dtype=comp_dtype,
+                )
             else:
                 dataset = hf[dset_name]
 
@@ -1452,10 +1643,12 @@ def _bin_lb_hdf5(lat_bin_edges, long_bin_edges, obj_arr, output_root):
             # Binning the stars and/or compact objects
             ##########
             if obj_arr is not None:
-                id_lb = np.where((obj_arr['glat'] >= lat_bin_edges[bb]) &
-                                 (obj_arr['glat'] < lat_bin_edges[bb + 1]) &
-                                 (obj_arr['glon'] >= long_bin_edges[ll]) &
-                                 (obj_arr['glon'] < long_bin_edges[ll + 1]))[0]
+                id_lb = np.where(
+                    (obj_arr["glat"] >= lat_bin_edges[bb])
+                    & (obj_arr["glat"] < lat_bin_edges[bb + 1])
+                    & (obj_arr["glon"] >= long_bin_edges[ll])
+                    & (obj_arr["glon"] < long_bin_edges[ll + 1])
+                )[0]
 
                 if len(id_lb) == 0:
                     continue
@@ -1469,7 +1662,7 @@ def _bin_lb_hdf5(lat_bin_edges, long_bin_edges, obj_arr, output_root):
                 # Resize the dataset and add data.
                 old_size = dataset.shape[0]
                 new_size = old_size + len(id_lb)
-                dataset.resize((new_size, ))
+                dataset.resize((new_size,))
                 dataset[old_size:new_size] = save_data
 
             hf.close()
@@ -1482,7 +1675,7 @@ def _bin_lb_hdf5(lat_bin_edges, long_bin_edges, obj_arr, output_root):
 ############################################################################
 
 
-def rho_dmhalo(r, rho_0=.0093, r_s=18.6, gamma=1):
+def rho_dmhalo(r, rho_0=0.0093, r_s=18.6, gamma=1):
     """
     Density profile of the dark matter halo.
     We are using the parametrization from McMillan (2017) Equation 5,
@@ -1495,14 +1688,24 @@ def rho_dmhalo(r, rho_0=.0093, r_s=18.6, gamma=1):
     returns: density at r [units: m_sun / pc**3]
     """
     x = r / r_s
-    rho = rho_0 / (x ** gamma * (1 + x) ** (3 - gamma))
+    rho = rho_0 / (x**gamma * (1 + x) ** (3 - gamma))
     return rho
 
 
-def _check_add_pbh(hdf5_file, ebf_file,
-                   fdm, pbh_mass,
-                   r_max, r_s, gamma, v_esc, rho_0, 
-                   diagnostic_plots, new_output_root, seed):
+def _check_add_pbh(
+    hdf5_file,
+    ebf_file,
+    fdm,
+    pbh_mass,
+    r_max,
+    r_s,
+    gamma,
+    v_esc,
+    rho_0,
+    diagnostic_plots,
+    new_output_root,
+    seed,
+):
     """
     Checks that the inputs of add_pbj are valid
 
@@ -1561,55 +1764,71 @@ def _check_add_pbh(hdf5_file, ebf_file,
         specified seed, forcing identical output for PyPopStar and PopSyCLE.
         Default None.
     """
-    if hdf5_file[-3:] != '.h5':
-        raise Exception('hdf5_file (%s) must be an ebf file.' % str(hdf5_file))
+    if hdf5_file[-3:] != ".h5":
+        raise Exception("hdf5_file (%s) must be an ebf file." % str(hdf5_file))
 
-    if ebf_file[-4:] != '.ebf':
-        raise Exception('ebf_file (%s) must be an ebf file.' % str(ebf_file))
+    if ebf_file[-4:] != ".ebf":
+        raise Exception("ebf_file (%s) must be an ebf file." % str(ebf_file))
 
     if type(fdm) != int:
         if type(fdm) != float:
-            raise Exception('fdm (%s) must be an integer or a float.' % str(fdm))
+            raise Exception("fdm (%s) must be an integer or a float." % str(fdm))
 
     if type(pbh_mass) != int:
         if type(pbh_mass) != float:
-            raise Exception('pbh_mass (%s) must be an integer or a float.' % str(pbh_mass))
+            raise Exception(
+                "pbh_mass (%s) must be an integer or a float." % str(pbh_mass)
+            )
 
     if type(r_max) != int:
         if type(r_max) != float:
-            raise Exception('r_max (%s) must be an integer or a float.' % str(r_max))
+            raise Exception("r_max (%s) must be an integer or a float." % str(r_max))
 
     if type(r_s) != int:
         if type(r_s) != float:
-            raise Exception('r_s (%s) must be an integer or a float.' % str(r_s))
+            raise Exception("r_s (%s) must be an integer or a float." % str(r_s))
 
-    if gamma not in [.25, .5, 1]:
-        raise Exception('gamma (%s) must be either .25, .5, 1' % str(gamma))
+    if gamma not in [0.25, 0.5, 1]:
+        raise Exception("gamma (%s) must be either .25, .5, 1" % str(gamma))
 
     if type(v_esc) != int:
         if type(v_esc) != float:
-            raise Exception('v_esc (%s) must be an integer or a float.' % str(v_esc))
+            raise Exception("v_esc (%s) must be an integer or a float." % str(v_esc))
 
     if type(rho_0) != int:
         if type(rho_0) != float:
-            raise Exception('rho_0 (%s) must be an integer or a float.' % str(rho_0))
+            raise Exception("rho_0 (%s) must be an integer or a float." % str(rho_0))
 
     if type(diagnostic_plots) != bool:
-        raise Exception('diagnostic_plots (%s) must be a boolean.' % str(diagnostic_plots))
+        raise Exception(
+            "diagnostic_plots (%s) must be a boolean." % str(diagnostic_plots)
+        )
 
     if new_output_root is not None:
         if type(new_output_root) != str:
-            raise Exception('new_output_root (%s) must be None or a string.' % str(new_output_root))
+            raise Exception(
+                "new_output_root (%s) must be None or a string." % str(new_output_root)
+            )
 
     if seed is not None:
         if type(seed) != int:
-            raise Exception('seed (%s) must be None or an integer.' % str(seed))
+            raise Exception("seed (%s) must be None or an integer." % str(seed))
 
 
-def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
-            r_max=16.6, r_s=18.6, gamma=1, v_esc=550,
-            rho_0=0.0093, diagnostic_plots=False,
-            new_output_root=None, seed=None):
+def add_pbh(
+    hdf5_file,
+    ebf_file,
+    fdm=1,
+    pbh_mass=40,
+    r_max=16.6,
+    r_s=18.6,
+    gamma=1,
+    v_esc=550,
+    rho_0=0.0093,
+    diagnostic_plots=False,
+    new_output_root=None,
+    seed=None,
+):
     """
     Given some hdf5 file from perform_pop_syn output, creates PBH positions, velocities, etc,
     and saves them in a new HDF5 file with the PBHs added.
@@ -1681,21 +1900,35 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     # whether input types are correct.
     ##########
 
-    _check_add_pbh(hdf5_file=hdf5_file, ebf_file=ebf_file,
-                   fdm=fdm, pbh_mass=pbh_mass,
-                   r_max=r_max, r_s=r_s, gamma=gamma, v_esc=v_esc,
-                   rho_0=rho_0, diagnostic_plots=diagnostic_plots,
-                   new_output_root=new_output_root, seed=seed)
+    _check_add_pbh(
+        hdf5_file=hdf5_file,
+        ebf_file=ebf_file,
+        fdm=fdm,
+        pbh_mass=pbh_mass,
+        r_max=r_max,
+        r_s=r_s,
+        gamma=gamma,
+        v_esc=v_esc,
+        rho_0=rho_0,
+        diagnostic_plots=diagnostic_plots,
+        new_output_root=new_output_root,
+        seed=seed,
+    )
 
     if new_output_root is None:
-        output_root = hdf5_file.replace('.h5', '')
-        output_hdf5_file = hdf5_file.replace('.h5', '_pbh_tmp.h5')
-        print('** WARNING **')
-        print("    'add_pbh' will overwrite %s, with PBHs appended to each key." % hdf5_file)
-        print("    To generate a new hdf5 file, rerun 'add_pbh' with the 'new_output_root' argument.")
+        output_root = hdf5_file.replace(".h5", "")
+        output_hdf5_file = hdf5_file.replace(".h5", "_pbh_tmp.h5")
+        print("** WARNING **")
+        print(
+            "    'add_pbh' will overwrite %s, with PBHs appended to each key."
+            % hdf5_file
+        )
+        print(
+            "    To generate a new hdf5 file, rerun 'add_pbh' with the 'new_output_root' argument."
+        )
     else:
         output_root = new_output_root
-        output_hdf5_file = '%s.h5' % new_output_root
+        output_hdf5_file = "%s.h5" % new_output_root
 
     ##########
     # Start of code
@@ -1707,15 +1940,15 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     t0 = time.time()
 
     # Read in the hdf5 file that doesn't have PBHs (product of perform_pop_syn)
-    no_pbh_hdf5_file = h5py.File(hdf5_file, 'r')
+    no_pbh_hdf5_file = h5py.File(hdf5_file, "r")
     key_list = list(no_pbh_hdf5_file)
     # Delete lat_bin_edges, long_bin_edges, and add_pbh from key_list
-    key_list = [key for key in key_list if 'bin_edges' not in key]
-    key_list = [key for key in key_list if 'add_pbh' not in key]
+    key_list = [key for key in key_list if "bin_edges" not in key]
+    key_list = [key for key in key_list if "add_pbh" not in key]
 
     # Get data from lat_bin_edges and long_bin_edges
-    lat_bin = no_pbh_hdf5_file['lat_bin_edges'][:]
-    long_bin = no_pbh_hdf5_file['long_bin_edges'][:]
+    lat_bin = no_pbh_hdf5_file["lat_bin_edges"][:]
+    long_bin = no_pbh_hdf5_file["long_bin_edges"][:]
     bin_edges_number = len(long_bin)
 
     # Get the maximum ID from all of the stars and compact objects
@@ -1724,7 +1957,7 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     for key in key_list:
         if len(no_pbh_hdf5_file[key]) == 0:
             continue
-        max_id_no_pbh.append(np.max(no_pbh_hdf5_file[key]['obj_id']))
+        max_id_no_pbh.append(np.max(no_pbh_hdf5_file[key]["obj_id"]))
     max_id = np.amax(max_id_no_pbh)
 
     hdf5_dset_names = no_pbh_hdf5_file[key_list[0]][:].dtype.names
@@ -1732,16 +1965,16 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     no_pbh_hdf5_file.close()
 
     # Read in ebf file
-    t = ebf.read_ind(ebf_file, '/log', 0)
+    t = ebf.read_ind(ebf_file, "/log", 0)
     # Convert log to useful dictionary
     ebf_log = make_ebf_log(t)
 
     # Obtain survey area, center latitude, and center longitude
-    b = float(ebf_log['latitude'])  # deg
+    b = float(ebf_log["latitude"])  # deg
     b_radian = b * np.pi / 180  # rad
-    l = float(ebf_log['longitude'])  # deg
+    l = float(ebf_log["longitude"])  # deg
     l_radian = l * np.pi / 180  # rad
-    surveyArea = float(ebf_log['surveyArea'])  # deg^2
+    surveyArea = float(ebf_log["surveyArea"])  # deg^2
 
     # Calculate the field of view for the current field
     field_of_view_radius = (surveyArea / np.pi) ** (1 / 2)
@@ -1752,41 +1985,47 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     r_h_linspace = np.linspace(0, r_max, num=n_lin)
 
     # Represent the line-of-sight line as galactic coordinates
-    galactic_lin = coord.Galactic(l=l_radian * units.rad,
-                                  b=b_radian * units.rad,
-                                  distance=r_h_linspace * units.kpc)
+    galactic_lin = coord.Galactic(
+        l=l_radian * units.rad,
+        b=b_radian * units.rad,
+        distance=r_h_linspace * units.kpc,
+    )
 
     # Transform the line-of-sight into to galactocentric coordinates
     # (Outputs l, b, and distance [units: deg, deg, kpc])
     galacto_lin = galactic_lin.transform_to(
-        coord.Galactocentric(representation_type='spherical'))
+        coord.Galactocentric(representation_type="spherical")
+    )
 
     # Determine dark matter density at all galactocentric radii along the line-of-sight
-    rho_lin = rho_dmhalo(galacto_lin.spherical.distance.value,
-                         rho_0=rho_0, r_s=r_s, gamma=gamma)
+    rho_lin = rho_dmhalo(
+        galacto_lin.spherical.distance.value, rho_0=rho_0, r_s=r_s, gamma=gamma
+    )
 
     # Estimate the total mass within the line-of-sight cylinder [units: M_sun kpc**-2]
     # Total mass = projected line-of-sight density x projected line-of-sight area
-    rho_marg_r = np.trapz(rho_lin, dx=(r_max) / n_lin) * 1000 ** 3
-    print("Projected density along line-of-sight = {0:0.2e} [M_sun kpc**-2]".format(
-            rho_marg_r))
+    rho_marg_r = np.trapz(rho_lin, dx=(r_max) / n_lin) * 1000**3
+    print(
+        "Projected density along line-of-sight = {0:0.2e} [M_sun kpc**-2]".format(
+            rho_marg_r
+        )
+    )
     # Determine line-of-sight cylinder radius, assuming small angle approximation [units: kpc]
     r_proj_los_cyl = field_of_view_radius * np.pi / 180 * (r_max)
     # Get projected area of the LOS cylinder [units: kpc**2]
-    area_proj_los_cyl = np.pi * r_proj_los_cyl ** 2
+    area_proj_los_cyl = np.pi * r_proj_los_cyl**2
     # Get the total mass within the line-of-sight cylinder
     mass_los_cyl = rho_marg_r * area_proj_los_cyl
-    print("Mass within line-of-sight cylinder = {0:0.2e} [M_sun]".format(
-        mass_los_cyl))
+    print("Mass within line-of-sight cylinder = {0:0.2e} [M_sun]".format(mass_los_cyl))
 
     # Get the total number of black holes to randomly draw
     n_pbh = int(np.round(fdm * mass_los_cyl / pbh_mass))
 
     # Estimate the discrete CDF based on the discrete PDF
     # (Switch into galactic coordinates)
-    rho_marg_r_cum = integrate.cumtrapz(y=rho_lin,
-                                        x=galactic_lin.distance.kpc,
-                                        dx=(r_max) / n_lin)
+    rho_marg_r_cum = integrate.cumtrapz(
+        y=rho_lin, x=galactic_lin.distance.kpc, dx=(r_max) / n_lin
+    )
     cdf_los = rho_marg_r_cum / rho_marg_r_cum[-1]
     # Since cumtrapz does not include zero for the first element, insert it
     cdf_los = np.insert(cdf_los, 0, 0)
@@ -1797,7 +2036,7 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     # Randomly sample galactic coordinates for the PBHs based on the CDF
     d_galactic = f_cdf_d(np.random.uniform(size=n_pbh))
 
-    # Randomly assign an l & b galactic coordinate to each PBH within the 
+    # Randomly assign an l & b galactic coordinate to each PBH within the
     # line-of-sight cone (sample the angle from 0 to 2pi [units: radians])
     theta = np.random.uniform(size=n_pbh) * 2 * np.pi
     # Make uniform by sampling a radius and correcting for annular area
@@ -1808,26 +2047,47 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     # Create mask for masking out PBHs falling outside of the observation cone
     mask_obs_cone = r_cyl <= r_proj_los_cyl * d_galactic / (r_max)
     print(
-        'Number of PBH before and after light cone masking: {0} and {1}, respectively'.format(
-            n_pbh, np.sum(mask_obs_cone)))
+        "Number of PBH before and after light cone masking: {0} and {1}, respectively".format(
+            n_pbh, np.sum(mask_obs_cone)
+        )
+    )
 
     # Get galactic l and b, assuming the small angle approximation
     b_galactic = r_cyl * np.sin(theta) / d_galactic + b_radian  # rad
     l_galactic = r_cyl * np.cos(theta) / np.cos(b_radian) / d_galactic + l_radian  # rad
 
     if diagnostic_plots:
-        print('Saving diagnostic plots')
+        print("Saving diagnostic plots")
         from popsycle.add_pbh_plots import print_plots
-        print_plots(output_root=output_root, galactic_lin_distance=galactic_lin.distance.kpc, 
-                galactic_lin_b=galactic_lin.b.deg, galactic_lin_l=galactic_lin.l.deg, 
-                galactocen_lin_spherical_distance=galacto_lin.spherical.distance.kpc,
-                galactocen_lin_spherical_b=galacto_lin.spherical.lat.deg, 
-                galactocen_lin_spherical_l=galacto_lin.spherical.lon.deg, rho_lin=rho_lin, 
-                r_max=r_max, n_lin=n_lin, cdf_los=cdf_los,
-                x_cyl=x_cyl, y_cyl=y_cyl, r_cyl=r_cyl, r_proj_los_cyl=r_proj_los_cyl, n_pbh=n_pbh, 
-                d_galac=d_galactic, b_galac=b_galactic, l_galac=l_galactic, area_proj_los_cyl=area_proj_los_cyl,
-                mask_obs_cone=mask_obs_cone, field_of_view_radius=field_of_view_radius, l_radian=l_radian, 
-                b_radian=b_radian, f_cdf_d=f_cdf_d, pbh_mass=pbh_mass)
+
+        print_plots(
+            output_root=output_root,
+            galactic_lin_distance=galactic_lin.distance.kpc,
+            galactic_lin_b=galactic_lin.b.deg,
+            galactic_lin_l=galactic_lin.l.deg,
+            galactocen_lin_spherical_distance=galacto_lin.spherical.distance.kpc,
+            galactocen_lin_spherical_b=galacto_lin.spherical.lat.deg,
+            galactocen_lin_spherical_l=galacto_lin.spherical.lon.deg,
+            rho_lin=rho_lin,
+            r_max=r_max,
+            n_lin=n_lin,
+            cdf_los=cdf_los,
+            x_cyl=x_cyl,
+            y_cyl=y_cyl,
+            r_cyl=r_cyl,
+            r_proj_los_cyl=r_proj_los_cyl,
+            n_pbh=n_pbh,
+            d_galac=d_galactic,
+            b_galac=b_galactic,
+            l_galac=l_galactic,
+            area_proj_los_cyl=area_proj_los_cyl,
+            mask_obs_cone=mask_obs_cone,
+            field_of_view_radius=field_of_view_radius,
+            l_radian=l_radian,
+            b_radian=b_radian,
+            f_cdf_d=f_cdf_d,
+            pbh_mass=pbh_mass,
+        )
 
     # Mask out PBHs outside of the observation cone
     d_galactic = d_galactic[mask_obs_cone]
@@ -1839,40 +2099,48 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
 
     # Determine how many PBHs are in the current field
     N_PBHs_in_field = len(d_galactic)
-    print('%i PBHs in the field' % N_PBHs_in_field)
+    print("%i PBHs in the field" % N_PBHs_in_field)
 
     if N_PBHs_in_field == 0:
-        print('-- No PBHs in the field')
-        print('-- Copying %s to %s' % (hdf5_file, output_hdf5_file))
+        print("-- No PBHs in the field")
+        print("-- Copying %s to %s" % (hdf5_file, output_hdf5_file))
         shutil.copy(hdf5_file, output_hdf5_file)
         return
 
     # Convert PBH positions back to galactocentric for determining velocities
-    galactic_pbh = coord.Galactic(l=longitude * units.deg,
-                                  b=latitude * units.deg,
-                                  distance=d_galactic * units.kpc)
+    galactic_pbh = coord.Galactic(
+        l=longitude * units.deg, b=latitude * units.deg, distance=d_galactic * units.kpc
+    )
     galacto_pbh = galactic_pbh.transform_to(
-        coord.Galactocentric(representation_type='cartesian'))
+        coord.Galactocentric(representation_type="cartesian")
+    )
     # Get the radial galactocentric PBH distances
     pbh_r_galacto = galacto_pbh.spherical.distance.value
 
     # Inner slope of the MW halo:
     # From Lacroix et al 2018, Figure 11 (top left panel)
-    data_dir = '%s/data' % os.path.dirname(inspect.getfile(add_pbh))
+    data_dir = "%s/data" % os.path.dirname(inspect.getfile(add_pbh))
     if gamma == 1:
-        vel_data = np.genfromtxt('%s/radial_velocity_profile_steep.csv' % data_dir,
-                                  names=True, delimiter=',')
-    elif gamma == .25:
-        vel_data = np.genfromtxt('%s/radial_velocity_profile_shallow.csv' % data_dir,
-                                  names=True, delimiter=',')
-    elif gamma == .5:
-        vel_data = np.genfromtxt('%s/radial_velocity_profile_middle.csv' % data_dir,
-                                  names=True, delimiter=',')
+        vel_data = np.genfromtxt(
+            "%s/radial_velocity_profile_steep.csv" % data_dir, names=True, delimiter=","
+        )
+    elif gamma == 0.25:
+        vel_data = np.genfromtxt(
+            "%s/radial_velocity_profile_shallow.csv" % data_dir,
+            names=True,
+            delimiter=",",
+        )
+    elif gamma == 0.5:
+        vel_data = np.genfromtxt(
+            "%s/radial_velocity_profile_middle.csv" % data_dir,
+            names=True,
+            delimiter=",",
+        )
     else:
-        raise Exception('gamma (%s) must be either .25, .5, 1' % str(gamma))
+        raise Exception("gamma (%s) must be either .25, .5, 1" % str(gamma))
 
     # Interpolate v values from the above data, given PBH radii
-    pbh_vrms = np.interp(pbh_r_galacto, vel_data['r'], vel_data['v'])
+    pbh_vrms = np.interp(pbh_r_galacto, vel_data["r"], vel_data["v"])
     v_vals = np.arange(0, v_esc)
     a = (1 / 2) * pbh_vrms * ((np.pi / 2) ** (1 / 2))
 
@@ -1880,9 +2148,11 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     rms_velocities = []
 
     for a_val in a:
-        cdf = special.erf(v_vals / (a_val * 2 ** (1 / 2))) - \
-                (((2 / np.pi) ** (1 / 2)) * ((v_vals * np.exp(-v_vals ** 2 / (2 * a_val ** 2)) / a_val)))
-        rand = np.random.uniform(0,1)
+        cdf = special.erf(v_vals / (a_val * 2 ** (1 / 2))) - (
+            ((2 / np.pi) ** (1 / 2))
+            * ((v_vals * np.exp(-(v_vals**2) / (2 * a_val**2)) / a_val))
+        )
+        rand = np.random.uniform(0, 1)
         rms_velocities.append(np.interp(rand, cdf, v_vals))
 
     # Complete PBH spherical velocities by sampling a latitude and longitude
@@ -1902,54 +2172,52 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     longitude = np.where(longitude > 180, longitude - 360, longitude)
 
     # Set the galactic coordinates
-    pbh_data['rad'] = d_galactic
-    pbh_data['glon'] = longitude
-    pbh_data['glat'] = latitude
+    pbh_data["rad"] = d_galactic
+    pbh_data["glon"] = longitude
+    pbh_data["glat"] = latitude
 
     # Set heliocentric velocities equal to galactocentric velocities
-    pbh_data['vx'] = cart_vel[0]
-    pbh_data['vy'] = cart_vel[1]
-    pbh_data['vz'] = cart_vel[2]
+    pbh_data["vx"] = cart_vel[0]
+    pbh_data["vy"] = cart_vel[1]
+    pbh_data["vz"] = cart_vel[2]
 
     # Get the rest of the PBH data for the combined .h5 file
-    pbh_data['mass'] = np.full(len(d_galactic), pbh_mass)
-    pbh_data['zams_mass'] = np.full(len(d_galactic), pbh_mass)
-    pbh_data['age'] = np.full(len(d_galactic), np.nan)
-    pbh_data['popid'] = np.full(len(d_galactic), 10)
-    pbh_data['rem_id'] = np.full(len(d_galactic), 104)
+    pbh_data["mass"] = np.full(len(d_galactic), pbh_mass)
+    pbh_data["zams_mass"] = np.full(len(d_galactic), pbh_mass)
+    pbh_data["age"] = np.full(len(d_galactic), np.nan)
+    pbh_data["popid"] = np.full(len(d_galactic), 10)
+    pbh_data["rem_id"] = np.full(len(d_galactic), 104)
 
     # Set the heliocentric PBH positions
     cart_helio = coord.spherical_to_cartesian(d_galactic, b_galactic, l_galactic)
-    pbh_data['px'] = cart_helio[0]
-    pbh_data['py'] = cart_helio[1]
-    pbh_data['pz'] = cart_helio[2]
+    pbh_data["px"] = cart_helio[0]
+    pbh_data["py"] = cart_helio[1]
+    pbh_data["pz"] = cart_helio[2]
 
     # Set the galactic velocity and proper motions
-    vr, mu_b, mu_lcosb = calc_sph_motion(cart_vel[0],
-                                         cart_vel[1],
-                                         cart_vel[2],
-                                         d_galactic, b_galactic, l_galactic)
-    pbh_data['vr'] = vr
-    pbh_data['mu_b'] = mu_b
-    pbh_data['mu_lcosb'] = mu_lcosb
-    
-    pbh_data['obj_id'] = np.arange((max_id + 1), (max_id + len(d_galactic) + 1))
+    vr, mu_b, mu_lcosb = calc_sph_motion(
+        cart_vel[0], cart_vel[1], cart_vel[2], d_galactic, b_galactic, l_galactic
+    )
+    pbh_data["vr"] = vr
+    pbh_data["mu_b"] = mu_b
+    pbh_data["mu_lcosb"] = mu_lcosb
 
-    pbh_data['exbv'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_K'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_J'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_I'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_U'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_R'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_B'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_H'] = np.full(len(d_galactic), np.nan)
-    pbh_data['ubv_V'] = np.full(len(d_galactic), np.nan)
+    pbh_data["obj_id"] = np.arange((max_id + 1), (max_id + len(d_galactic) + 1))
+
+    pbh_data["exbv"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_K"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_J"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_I"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_U"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_R"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_B"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_H"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_V"] = np.full(len(d_galactic), np.nan)
 
     # Note: The first four elements may not be in the compound datatype
     # due to legacy files. The ztf filters will only be present if
     # the hdf5 file was created with additional_photometric_systems = ['ztf']
-    for field in ['teff', 'grav', 'mbol', 'feh',
-                  'ztf_g', 'ztf_r', 'ztf_i']:
+    for field in ["teff", "grav", "mbol", "feh", "ztf_g", "ztf_r", "ztf_i"]:
         if field in hdf5_dset_names:
             pbh_data[field] = np.full(len(d_galactic), np.nan)
 
@@ -1957,20 +2225,20 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     # file with no PBHs, to determine the datasets to correctly append the PBHs to
     lat_long_list = []
     for key in key_list:
-        idx_l = int(key.split('b')[0].replace('l', ''))
+        idx_l = int(key.split("b")[0].replace("l", ""))
         max_l = long_bin[idx_l + 1]
         min_l = long_bin[idx_l]
 
-        idx_b = int(key.split('b')[1])
+        idx_b = int(key.split("b")[1])
         max_b = lat_bin[idx_b + 1]
         min_b = lat_bin[idx_b]
 
         lat_long_list.append((min_l, max_l, min_b, max_b))
 
     # Open the file with no PBHs and create a new file for data with PBHs added
-    no_pbh_hdf5_file = h5py.File(hdf5_file, 'r')
-    pbh_hdf5_file = h5py.File(output_hdf5_file, 'w')
-    pbh_hdf5_file['add_pbh'] = True
+    no_pbh_hdf5_file = h5py.File(hdf5_file, "r")
+    pbh_hdf5_file = h5py.File(output_hdf5_file, "w")
+    pbh_hdf5_file["add_pbh"] = True
 
     # Append the PBH data to the data with no PBHs, and write to an .h5 file
     N_objs_no_pbh = 0
@@ -1980,7 +2248,7 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
         key_data = no_pbh_hdf5_file[key][:]
 
         # Remove any PBHs that are already in the h5 file
-        cond = key_data['rem_id'] != 104
+        cond = key_data["rem_id"] != 104
         key_data = key_data[cond]
         N_pbhs_removed += np.sum(~cond)
 
@@ -1989,10 +2257,12 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
 
         # Build a mask on the PBHs that fits the bounds of the key
         min_l, max_l, min_b, max_b = lat_long_list[idx]
-        mask = (pbh_data['glon'] >= min_l) & \
-               (pbh_data['glon'] <= max_l) & \
-               (pbh_data['glat'] >= min_b) & \
-               (pbh_data['glat'] <= max_b)
+        mask = (
+            (pbh_data["glon"] >= min_l)
+            & (pbh_data["glon"] <= max_l)
+            & (pbh_data["glat"] >= min_b)
+            & (pbh_data["glat"] <= max_b)
+        )
 
         # If there are no PBHs in the key, copy over the original key
         if np.sum(mask) == 0:
@@ -2002,14 +2272,11 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
             pbh_data_in_key = pbh_data[mask]
             combined_data = np.hstack((key_data, pbh_data_in_key))
         N_objs_pbh += combined_data.shape[0]
-        _ = pbh_hdf5_file.create_dataset(key,
-                                         shape=(combined_data.shape[0],),
-                                         dtype=comp_dtype,
-                                         data=combined_data)
-    _ = pbh_hdf5_file.create_dataset('lat_bin_edges', (len(lat_bin), 1),
-                                     data=lat_bin)
-    _ = pbh_hdf5_file.create_dataset('long_bin_edges', (len(lat_bin), 1),
-                                     data=long_bin)
+        _ = pbh_hdf5_file.create_dataset(
+            key, shape=(combined_data.shape[0],), dtype=comp_dtype, data=combined_data
+        )
+    _ = pbh_hdf5_file.create_dataset("lat_bin_edges", (len(lat_bin), 1), data=lat_bin)
+    _ = pbh_hdf5_file.create_dataset("long_bin_edges", (len(lat_bin), 1), data=long_bin)
     no_pbh_hdf5_file.close()
     pbh_hdf5_file.close()
 
@@ -2025,59 +2292,658 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
     ##########
     now = datetime.datetime.now()
     popsycle_path = os.path.dirname(inspect.getfile(perform_pop_syn))
-    popsycle_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                             cwd=popsycle_path).decode('ascii').strip()
-    dash_line = '-----------------------------' + '\n'
-    empty_line = '\n'
+    popsycle_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popsycle_path)
+        .decode("ascii")
+        .strip()
+    )
+    dash_line = "-----------------------------" + "\n"
+    empty_line = "\n"
 
-    line0 = 'FUNCTION INPUT PARAMETERS' + '\n'
-    line1 = 'hdf5_file , ' + hdf5_file + '\n'
-    line2 = 'ebf_file , ' + ebf_file + '\n'
-    line3 = 'fdm , ' + str(fdm) + '\n'
-    line4 = 'pbh_mass , ' + str(pbh_mass) + ' , (Msun)' + '\n'
-    line5 = 'r_max , ' + str(r_max) + ' , (kpc)' + '\n'
-    line6 = 'r_s , ' + str(r_s) + ' , (kpc)' + '\n'
-    line7 = 'gamma , ' + str(gamma) + '\n'
-    line8 = 'v_esc , ' + str(v_esc) + ' , (km/s)' + '\n'
-    line9 = 'rho_0 , ' + str(rho_0) + ' , (Msun / pc^3)' + '\n'
-    line10 = 'diagnostic_plots , ' + str(diagnostic_plots) + '\n'
-    line11 = 'new_output_root , ' + str(new_output_root) + '\n'
-    line12 = 'seed , ' + str(seed) + '\n'
+    line0 = "FUNCTION INPUT PARAMETERS" + "\n"
+    line1 = "hdf5_file , " + hdf5_file + "\n"
+    line2 = "ebf_file , " + ebf_file + "\n"
+    line3 = "fdm , " + str(fdm) + "\n"
+    line4 = "pbh_mass , " + str(pbh_mass) + " , (Msun)" + "\n"
+    line5 = "r_max , " + str(r_max) + " , (kpc)" + "\n"
+    line6 = "r_s , " + str(r_s) + " , (kpc)" + "\n"
+    line7 = "gamma , " + str(gamma) + "\n"
+    line8 = "v_esc , " + str(v_esc) + " , (km/s)" + "\n"
+    line9 = "rho_0 , " + str(rho_0) + " , (Msun / pc^3)" + "\n"
+    line10 = "diagnostic_plots , " + str(diagnostic_plots) + "\n"
+    line11 = "new_output_root , " + str(new_output_root) + "\n"
+    line12 = "seed , " + str(seed) + "\n"
 
-    line13 = 'VERSION INFORMATION' + '\n'
-    line14 = str(now) + ' : creation date' + '\n'
-    line15 = popsycle_hash + ' : PopSyCLE commit' + '\n'
+    line13 = "VERSION INFORMATION" + "\n"
+    line14 = str(now) + " : creation date" + "\n"
+    line15 = popsycle_hash + " : PopSyCLE commit" + "\n"
 
-    line16 = 'OTHER INFORMATION' + '\n'
-    line17 = str(t1 - t0) + ' : total runtime (s)' + '\n'
-    line18 = str(N_objs_no_pbh) + ' : original objects' + '\n'
-    line19 = str(N_PBHs_in_field) + ' : PBHs in the field' + '\n'
-    line20 = str(N_objs_pbh) + ' : new total objects' + '\n'
+    line16 = "OTHER INFORMATION" + "\n"
+    line17 = str(t1 - t0) + " : total runtime (s)" + "\n"
+    line18 = str(N_objs_no_pbh) + " : original objects" + "\n"
+    line19 = str(N_PBHs_in_field) + " : PBHs in the field" + "\n"
+    line20 = str(N_objs_pbh) + " : new total objects" + "\n"
 
-    line21 = 'FILES CREATED' + '\n'
-    line22 = output_hdf5_file + ' : HDF5 file' + '\n'
+    line21 = "FILES CREATED" + "\n"
+    line22 = output_hdf5_file + " : HDF5 file" + "\n"
 
-    with open(output_root + '_add_pbh.log', 'w') as out:
-        out.writelines([line0, dash_line, line1, line2, line3, line4, line5,
-                        line6, line7, line8, line9, line10, line11, line12,
-                        empty_line, line13, dash_line, line14, line15,
-                        empty_line, line16, dash_line, line17, line18, line19,
-                        line20, empty_line, line21, dash_line, line22])
+    with open(output_root + "_add_pbh.log", "w") as out:
+        out.writelines(
+            [
+                line0,
+                dash_line,
+                line1,
+                line2,
+                line3,
+                line4,
+                line5,
+                line6,
+                line7,
+                line8,
+                line9,
+                line10,
+                line11,
+                line12,
+                empty_line,
+                line13,
+                dash_line,
+                line14,
+                line15,
+                empty_line,
+                line16,
+                dash_line,
+                line17,
+                line18,
+                line19,
+                line20,
+                empty_line,
+                line21,
+                dash_line,
+                line22,
+            ]
+        )
 
     ##########
     # Informative print statements.
     ##########
-    print('- %i PBHS removed from %s' % (N_pbhs_removed, hdf5_file))
-    print('--- %i original objects' % N_objs_no_pbh)
-    print('--- %i PBHs in the field' % N_PBHs_in_field)
-    print('--- %i new total objects' % N_objs_pbh)
+    print("- %i PBHS removed from %s" % (N_pbhs_removed, hdf5_file))
+    print("--- %i original objects" % N_objs_no_pbh)
+    print("--- %i PBHs in the field" % N_PBHs_in_field)
+    print("--- %i new total objects" % N_objs_pbh)
 
     if N_objs_pbh == N_objs_no_pbh + N_PBHs_in_field:
-        print('Binned PBHs equals total PBHs')
+        print("Binned PBHs equals total PBHs")
     else:
-        print('** MISSING PBHs!! **')
+        print("** MISSING PBHs!! **")
 
-    print('add_pbh runtime: {0:f} s'.format(t1 - t0))
+    print("add_pbh runtime: {0:f} s".format(t1 - t0))
+    return
+
+
+##########
+# Add ffps in the same way that pbhs are added.
+def add_pbh(
+    hdf5_file,
+    ebf_file,
+    fdm=1,
+    pbh_mass=40,
+    r_max=16.6,
+    r_s=18.6,
+    gamma=1,
+    v_esc=550,
+    rho_0=0.0093,
+    diagnostic_plots=False,
+    new_output_root=None,
+    seed=None,
+):
+    """
+    Given some hdf5 file from perform_pop_syn output, creates PBH positions, velocities, etc,
+    and saves them in a new HDF5 file with the PBHs added.
+
+    Parameters
+    ----------
+    hdf5_file : str or hdf5 file
+        str : name of the hdf5 file from the output of perform_pop_syn
+
+    ebf_file : str or ebf file
+        str : name of the ebf file from Galaxia
+        ebf file : actually the ebf file from Galaxia
+
+    fdm : float
+        Fraction of dark matter.
+        The fraction of dark matter that you want to consist of PBHs.
+        Defaults to 1.
+
+    pbh_mass : int
+        The single mass that all PBHs will have (in units of Msun).
+        Defaults to 40 Msun (from LIGO detections thought to be primordial)
+
+    r_max : float
+        The maximum radius from the Earth that you want to find PBHs.
+        Defaults to 16.6 kpc. (2 * distance to galactic center)
+
+    r_s: float
+        The scale radius of the Milky Way (in kpc). r_s = r_vir / c (virial radius / concentration index)
+        Defaults to 18.6 kpc. The median value given in McMillan 2017.
+
+    gamma: float
+        The inner slope of the MW dark matter halo as described in LaCroix 2018.
+        Gamma goes into the determination of the velocities and each value returns a slightly different distribution.
+        The default value is 1, corresponding to an NFW profile.
+
+    v_esc: int
+        The escape velocity of the Milky Way (in km/s).
+        v_esc is used in calculating the velocities.
+        Default is 550 km/s. Most papers cite values of 515-575.
+
+    rho_0: float
+        The initial density that will be used in the NFW profile equations (in units of Msun/pc^3).
+        Defaults to .0093 [Msun / pc^3]. The median value given in McMillan 2017.
+
+    Optional Parameters
+    -------------------
+    diagnostic_plots: bool
+        If set to True, pbh_diagnostic_plots.py is run, and diagnostic plots are saved into a pdf file.
+        Default False.
+
+    new_output_root : str
+        If set to None, 'add_pbh' overwrites the original hdf5 file with a
+        new hdf5 file of the same name. If set to a string, this string is the
+        prefix of the new hdf5 file.
+        Default None.
+
+    seed : int
+        If set to non-None, all random sampling will be seeded with the
+        specified seed, forcing identical output for PyPopStar and PopSyCLE.
+        Default None.
+
+    Outputs
+    -------
+    <new_output_root>.h5 : hdf5 file
+        The new .h5 file with PBHs injected in.
+    """
+    ##########
+    # Error handling: check whether files exist and
+    # whether input types are correct.
+    ##########
+
+    _check_add_pbh(
+        hdf5_file=hdf5_file,
+        ebf_file=ebf_file,
+        fdm=fdm,
+        pbh_mass=pbh_mass,
+        r_max=r_max,
+        r_s=r_s,
+        gamma=gamma,
+        v_esc=v_esc,
+        rho_0=rho_0,
+        diagnostic_plots=diagnostic_plots,
+        new_output_root=new_output_root,
+        seed=seed,
+    )
+
+    if new_output_root is None:
+        output_root = hdf5_file.replace(".h5", "")
+        output_hdf5_file = hdf5_file.replace(".h5", "_pbh_tmp.h5")
+        print("** WARNING **")
+        print(
+            "    'add_pbh' will overwrite %s, with PBHs appended to each key."
+            % hdf5_file
+        )
+        print(
+            "    To generate a new hdf5 file, rerun 'add_pbh' with the 'new_output_root' argument."
+        )
+    else:
+        output_root = new_output_root
+        output_hdf5_file = "%s.h5" % new_output_root
+
+    ##########
+    # Start of code
+    #########
+
+    # Set random seed
+    np.random.seed(seed)
+
+    t0 = time.time()
+
+    # Read in the hdf5 file that doesn't have PBHs (product of perform_pop_syn)
+    no_pbh_hdf5_file = h5py.File(hdf5_file, "r")
+    key_list = list(no_pbh_hdf5_file)
+    # Delete lat_bin_edges, long_bin_edges, and add_pbh from key_list
+    key_list = [key for key in key_list if "bin_edges" not in key]
+    key_list = [key for key in key_list if "add_pbh" not in key]
+
+    # Get data from lat_bin_edges and long_bin_edges
+    lat_bin = no_pbh_hdf5_file["lat_bin_edges"][:]
+    long_bin = no_pbh_hdf5_file["long_bin_edges"][:]
+    bin_edges_number = len(long_bin)
+
+    # Get the maximum ID from all of the stars and compact objects
+    # (Later used to set the IDs of the PBHs)
+    max_id_no_pbh = []
+    for key in key_list:
+        if len(no_pbh_hdf5_file[key]) == 0:
+            continue
+        max_id_no_pbh.append(np.max(no_pbh_hdf5_file[key]["obj_id"]))
+    max_id = np.amax(max_id_no_pbh)
+
+    hdf5_dset_names = no_pbh_hdf5_file[key_list[0]][:].dtype.names
+
+    no_pbh_hdf5_file.close()
+
+    # Read in ebf file
+    t = ebf.read_ind(ebf_file, "/log", 0)
+    # Convert log to useful dictionary
+    ebf_log = make_ebf_log(t)
+
+    # Obtain survey area, center latitude, and center longitude
+    b = float(ebf_log["latitude"])  # deg
+    b_radian = b * np.pi / 180  # rad
+    l = float(ebf_log["longitude"])  # deg
+    l_radian = l * np.pi / 180  # rad
+    surveyArea = float(ebf_log["surveyArea"])  # deg^2
+
+    # Calculate the field of view for the current field
+    field_of_view_radius = (surveyArea / np.pi) ** (1 / 2)
+
+    # Generate an array of heliocentric radii
+    # (Just used to numerically integrate the line-of-sight density)
+    n_lin = 100000
+    r_h_linspace = np.linspace(0, r_max, num=n_lin)
+
+    # Represent the line-of-sight line as galactic coordinates
+    galactic_lin = coord.Galactic(
+        l=l_radian * units.rad,
+        b=b_radian * units.rad,
+        distance=r_h_linspace * units.kpc,
+    )
+
+    # Transform the line-of-sight into to galactocentric coordinates
+    # (Outputs l, b, and distance [units: deg, deg, kpc])
+    galacto_lin = galactic_lin.transform_to(
+        coord.Galactocentric(representation_type="spherical")
+    )
+
+    # Determine dark matter density at all galactocentric radii along the line-of-sight
+    rho_lin = rho_dmhalo(
+        galacto_lin.spherical.distance.value, rho_0=rho_0, r_s=r_s, gamma=gamma
+    )
+
+    # Estimate the total mass within the line-of-sight cylinder [units: M_sun kpc**-2]
+    # Total mass = projected line-of-sight density x projected line-of-sight area
+    rho_marg_r = np.trapz(rho_lin, dx=(r_max) / n_lin) * 1000**3
+    print(
+        "Projected density along line-of-sight = {0:0.2e} [M_sun kpc**-2]".format(
+            rho_marg_r
+        )
+    )
+    # Determine line-of-sight cylinder radius, assuming small angle approximation [units: kpc]
+    r_proj_los_cyl = field_of_view_radius * np.pi / 180 * (r_max)
+    # Get projected area of the LOS cylinder [units: kpc**2]
+    area_proj_los_cyl = np.pi * r_proj_los_cyl**2
+    # Get the total mass within the line-of-sight cylinder
+    mass_los_cyl = rho_marg_r * area_proj_los_cyl
+    print("Mass within line-of-sight cylinder = {0:0.2e} [M_sun]".format(mass_los_cyl))
+
+    # Get the total number of black holes to randomly draw
+    n_pbh = int(np.round(fdm * mass_los_cyl / pbh_mass))
+
+    # Estimate the discrete CDF based on the discrete PDF
+    # (Switch into galactic coordinates)
+    rho_marg_r_cum = integrate.cumtrapz(
+        y=rho_lin, x=galactic_lin.distance.kpc, dx=(r_max) / n_lin
+    )
+    cdf_los = rho_marg_r_cum / rho_marg_r_cum[-1]
+    # Since cumtrapz does not include zero for the first element, insert it
+    cdf_los = np.insert(cdf_los, 0, 0)
+
+    # Create a function to interpolate the CDF so that we can randomly sample from it
+    f_cdf_d = interpolate.interp1d(cdf_los, galactic_lin.distance.kpc)
+
+    # Randomly sample galactic coordinates for the PBHs based on the CDF
+    d_galactic = f_cdf_d(np.random.uniform(size=n_pbh))
+
+    # Randomly assign an l & b galactic coordinate to each PBH within the
+    # line-of-sight cone (sample the angle from 0 to 2pi [units: radians])
+    theta = np.random.uniform(size=n_pbh) * 2 * np.pi
+    # Make uniform by sampling a radius and correcting for annular area
+    r_cyl = r_proj_los_cyl * np.sqrt(np.random.uniform(size=n_pbh))  # kpc
+    y_cyl = r_cyl * np.sin(theta)  # kpc
+    x_cyl = r_cyl * np.cos(theta)  # kpc
+
+    # Create mask for masking out PBHs falling outside of the observation cone
+    mask_obs_cone = r_cyl <= r_proj_los_cyl * d_galactic / (r_max)
+    print(
+        "Number of PBH before and after light cone masking: {0} and {1}, respectively".format(
+            n_pbh, np.sum(mask_obs_cone)
+        )
+    )
+
+    # Get galactic l and b, assuming the small angle approximation
+    b_galactic = r_cyl * np.sin(theta) / d_galactic + b_radian  # rad
+    l_galactic = r_cyl * np.cos(theta) / np.cos(b_radian) / d_galactic + l_radian  # rad
+
+    if diagnostic_plots:
+        print("Saving diagnostic plots")
+        from popsycle.add_pbh_plots import print_plots
+
+        print_plots(
+            output_root=output_root,
+            galactic_lin_distance=galactic_lin.distance.kpc,
+            galactic_lin_b=galactic_lin.b.deg,
+            galactic_lin_l=galactic_lin.l.deg,
+            galactocen_lin_spherical_distance=galacto_lin.spherical.distance.kpc,
+            galactocen_lin_spherical_b=galacto_lin.spherical.lat.deg,
+            galactocen_lin_spherical_l=galacto_lin.spherical.lon.deg,
+            rho_lin=rho_lin,
+            r_max=r_max,
+            n_lin=n_lin,
+            cdf_los=cdf_los,
+            x_cyl=x_cyl,
+            y_cyl=y_cyl,
+            r_cyl=r_cyl,
+            r_proj_los_cyl=r_proj_los_cyl,
+            n_pbh=n_pbh,
+            d_galac=d_galactic,
+            b_galac=b_galactic,
+            l_galac=l_galactic,
+            area_proj_los_cyl=area_proj_los_cyl,
+            mask_obs_cone=mask_obs_cone,
+            field_of_view_radius=field_of_view_radius,
+            l_radian=l_radian,
+            b_radian=b_radian,
+            f_cdf_d=f_cdf_d,
+            pbh_mass=pbh_mass,
+        )
+
+    # Mask out PBHs outside of the observation cone
+    d_galactic = d_galactic[mask_obs_cone]
+    b_galactic = b_galactic[mask_obs_cone]
+    l_galactic = l_galactic[mask_obs_cone]
+
+    latitude = b_galactic * (180 / np.pi)  # degrees
+    longitude = l_galactic * (180 / np.pi)  # degrees
+
+    # Determine how many PBHs are in the current field
+    N_PBHs_in_field = len(d_galactic)
+    print("%i PBHs in the field" % N_PBHs_in_field)
+
+    if N_PBHs_in_field == 0:
+        print("-- No PBHs in the field")
+        print("-- Copying %s to %s" % (hdf5_file, output_hdf5_file))
+        shutil.copy(hdf5_file, output_hdf5_file)
+        return
+
+    # Convert PBH positions back to galactocentric for determining velocities
+    galactic_pbh = coord.Galactic(
+        l=longitude * units.deg, b=latitude * units.deg, distance=d_galactic * units.kpc
+    )
+    galacto_pbh = galactic_pbh.transform_to(
+        coord.Galactocentric(representation_type="cartesian")
+    )
+    # Get the radial galactocentric PBH distances
+    pbh_r_galacto = galacto_pbh.spherical.distance.value
+
+    # Inner slope of the MW halo:
+    # From Lacroix et al 2018, Figure 11 (top left panel)
+    data_dir = "%s/data" % os.path.dirname(inspect.getfile(add_pbh))
+    if gamma == 1:
+        vel_data = np.genfromtxt(
+            "%s/radial_velocity_profile_steep.csv" % data_dir, names=True, delimiter=","
+        )
+    elif gamma == 0.25:
+        vel_data = np.genfromtxt(
+            "%s/radial_velocity_profile_shallow.csv" % data_dir,
+            names=True,
+            delimiter=",",
+        )
+    elif gamma == 0.5:
+        vel_data = np.genfromtxt(
+            "%s/radial_velocity_profile_middle.csv" % data_dir,
+            names=True,
+            delimiter=",",
+        )
+    else:
+        raise Exception("gamma (%s) must be either .25, .5, 1" % str(gamma))
+
+    # Interpolate v values from the above data, given PBH radii
+    pbh_vrms = np.interp(pbh_r_galacto, vel_data["r"], vel_data["v"])
+    v_vals = np.arange(0, v_esc)
+    a = (1 / 2) * pbh_vrms * ((np.pi / 2) ** (1 / 2))
+
+    # Calculate RMS velocities for each PBH by randomly sampling the Maxwellian CDF
+    rms_velocities = []
+
+    for a_val in a:
+        cdf = special.erf(v_vals / (a_val * 2 ** (1 / 2))) - (
+            ((2 / np.pi) ** (1 / 2))
+            * ((v_vals * np.exp(-(v_vals**2) / (2 * a_val**2)) / a_val))
+        )
+        rand = np.random.uniform(0, 1)
+        rms_velocities.append(np.interp(rand, cdf, v_vals))
+
+    # Complete PBH spherical velocities by sampling a latitude and longitude
+    # (arcsin is used so that PBHs are placed in more realistic locations)
+    sin_lat_vel = np.random.uniform(-1, 1, len(d_galactic))
+    lat_vel = np.arcsin(sin_lat_vel)
+    long_vel = np.random.uniform(0, 2 * np.pi, len(d_galactic))
+
+    # Transform velocities to cartesian to get vx, vy, and vz
+    cart_vel = coord.spherical_to_cartesian(rms_velocities, lat_vel, long_vel)
+
+    # Load up a numpy array
+    comp_dtype = _generate_comp_dtype(hdf5_dset_names)
+    pbh_data = np.empty(len(d_galactic), dtype=comp_dtype)
+
+    # Transform latitude and longitude into the right format for PopSyCLE
+    longitude = np.where(longitude > 180, longitude - 360, longitude)
+
+    # Set the galactic coordinates
+    pbh_data["rad"] = d_galactic
+    pbh_data["glon"] = longitude
+    pbh_data["glat"] = latitude
+
+    # Set heliocentric velocities equal to galactocentric velocities
+    pbh_data["vx"] = cart_vel[0]
+    pbh_data["vy"] = cart_vel[1]
+    pbh_data["vz"] = cart_vel[2]
+
+    # Get the rest of the PBH data for the combined .h5 file
+    pbh_data["mass"] = np.full(len(d_galactic), pbh_mass)
+    pbh_data["zams_mass"] = np.full(len(d_galactic), pbh_mass)
+    pbh_data["age"] = np.full(len(d_galactic), np.nan)
+    pbh_data["popid"] = np.full(len(d_galactic), 10)
+    pbh_data["rem_id"] = np.full(len(d_galactic), 104)
+
+    # Set the heliocentric PBH positions
+    cart_helio = coord.spherical_to_cartesian(d_galactic, b_galactic, l_galactic)
+    pbh_data["px"] = cart_helio[0]
+    pbh_data["py"] = cart_helio[1]
+    pbh_data["pz"] = cart_helio[2]
+
+    # Set the galactic velocity and proper motions
+    vr, mu_b, mu_lcosb = calc_sph_motion(
+        cart_vel[0], cart_vel[1], cart_vel[2], d_galactic, b_galactic, l_galactic
+    )
+    pbh_data["vr"] = vr
+    pbh_data["mu_b"] = mu_b
+    pbh_data["mu_lcosb"] = mu_lcosb
+
+    pbh_data["obj_id"] = np.arange((max_id + 1), (max_id + len(d_galactic) + 1))
+
+    pbh_data["exbv"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_K"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_J"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_I"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_U"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_R"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_B"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_H"] = np.full(len(d_galactic), np.nan)
+    pbh_data["ubv_V"] = np.full(len(d_galactic), np.nan)
+
+    # Note: The first four elements may not be in the compound datatype
+    # due to legacy files. The ztf filters will only be present if
+    # the hdf5 file was created with additional_photometric_systems = ['ztf']
+    for field in ["teff", "grav", "mbol", "feh", "ztf_g", "ztf_r", "ztf_i"]:
+        if field in hdf5_dset_names:
+            pbh_data[field] = np.full(len(d_galactic), np.nan)
+
+    # Calculate the maximum and minimum l and b values for each dataset in the
+    # file with no PBHs, to determine the datasets to correctly append the PBHs to
+    lat_long_list = []
+    for key in key_list:
+        idx_l = int(key.split("b")[0].replace("l", ""))
+        max_l = long_bin[idx_l + 1]
+        min_l = long_bin[idx_l]
+
+        idx_b = int(key.split("b")[1])
+        max_b = lat_bin[idx_b + 1]
+        min_b = lat_bin[idx_b]
+
+        lat_long_list.append((min_l, max_l, min_b, max_b))
+
+    # Open the file with no PBHs and create a new file for data with PBHs added
+    no_pbh_hdf5_file = h5py.File(hdf5_file, "r")
+    pbh_hdf5_file = h5py.File(output_hdf5_file, "w")
+    pbh_hdf5_file["add_pbh"] = True
+
+    # Append the PBH data to the data with no PBHs, and write to an .h5 file
+    N_objs_no_pbh = 0
+    N_objs_pbh = 0
+    N_pbhs_removed = 0
+    for idx, key in enumerate(key_list):
+        key_data = no_pbh_hdf5_file[key][:]
+
+        # Remove any PBHs that are already in the h5 file
+        cond = key_data["rem_id"] != 104
+        key_data = key_data[cond]
+        N_pbhs_removed += np.sum(~cond)
+
+        # Count the number of objects in the key
+        N_objs_no_pbh += key_data.shape[0]
+
+        # Build a mask on the PBHs that fits the bounds of the key
+        min_l, max_l, min_b, max_b = lat_long_list[idx]
+        mask = (
+            (pbh_data["glon"] >= min_l)
+            & (pbh_data["glon"] <= max_l)
+            & (pbh_data["glat"] >= min_b)
+            & (pbh_data["glat"] <= max_b)
+        )
+
+        # If there are no PBHs in the key, copy over the original key
+        if np.sum(mask) == 0:
+            combined_data = key_data
+        # If there are PBHs in the key, append them to the original key
+        else:
+            pbh_data_in_key = pbh_data[mask]
+            combined_data = np.hstack((key_data, pbh_data_in_key))
+        N_objs_pbh += combined_data.shape[0]
+        _ = pbh_hdf5_file.create_dataset(
+            key, shape=(combined_data.shape[0],), dtype=comp_dtype, data=combined_data
+        )
+    _ = pbh_hdf5_file.create_dataset("lat_bin_edges", (len(lat_bin), 1), data=lat_bin)
+    _ = pbh_hdf5_file.create_dataset("long_bin_edges", (len(lat_bin), 1), data=long_bin)
+    no_pbh_hdf5_file.close()
+    pbh_hdf5_file.close()
+
+    # If 'new_output_root' is None, replace temporary file with original
+    if new_output_root is None:
+        os.remove(hdf5_file)
+        os.rename(output_hdf5_file, hdf5_file)
+
+    t1 = time.time()
+
+    ##########
+    # Make log file
+    ##########
+    now = datetime.datetime.now()
+    popsycle_path = os.path.dirname(inspect.getfile(perform_pop_syn))
+    popsycle_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popsycle_path)
+        .decode("ascii")
+        .strip()
+    )
+    dash_line = "-----------------------------" + "\n"
+    empty_line = "\n"
+
+    line0 = "FUNCTION INPUT PARAMETERS" + "\n"
+    line1 = "hdf5_file , " + hdf5_file + "\n"
+    line2 = "ebf_file , " + ebf_file + "\n"
+    line3 = "fdm , " + str(fdm) + "\n"
+    line4 = "pbh_mass , " + str(pbh_mass) + " , (Msun)" + "\n"
+    line5 = "r_max , " + str(r_max) + " , (kpc)" + "\n"
+    line6 = "r_s , " + str(r_s) + " , (kpc)" + "\n"
+    line7 = "gamma , " + str(gamma) + "\n"
+    line8 = "v_esc , " + str(v_esc) + " , (km/s)" + "\n"
+    line9 = "rho_0 , " + str(rho_0) + " , (Msun / pc^3)" + "\n"
+    line10 = "diagnostic_plots , " + str(diagnostic_plots) + "\n"
+    line11 = "new_output_root , " + str(new_output_root) + "\n"
+    line12 = "seed , " + str(seed) + "\n"
+
+    line13 = "VERSION INFORMATION" + "\n"
+    line14 = str(now) + " : creation date" + "\n"
+    line15 = popsycle_hash + " : PopSyCLE commit" + "\n"
+
+    line16 = "OTHER INFORMATION" + "\n"
+    line17 = str(t1 - t0) + " : total runtime (s)" + "\n"
+    line18 = str(N_objs_no_pbh) + " : original objects" + "\n"
+    line19 = str(N_PBHs_in_field) + " : PBHs in the field" + "\n"
+    line20 = str(N_objs_pbh) + " : new total objects" + "\n"
+
+    line21 = "FILES CREATED" + "\n"
+    line22 = output_hdf5_file + " : HDF5 file" + "\n"
+
+    with open(output_root + "_add_pbh.log", "w") as out:
+        out.writelines(
+            [
+                line0,
+                dash_line,
+                line1,
+                line2,
+                line3,
+                line4,
+                line5,
+                line6,
+                line7,
+                line8,
+                line9,
+                line10,
+                line11,
+                line12,
+                empty_line,
+                line13,
+                dash_line,
+                line14,
+                line15,
+                empty_line,
+                line16,
+                dash_line,
+                line17,
+                line18,
+                line19,
+                line20,
+                empty_line,
+                line21,
+                dash_line,
+                line22,
+            ]
+        )
+
+    ##########
+    # Informative print statements.
+    ##########
+    print("- %i PBHS removed from %s" % (N_pbhs_removed, hdf5_file))
+    print("--- %i original objects" % N_objs_no_pbh)
+    print("--- %i PBHs in the field" % N_PBHs_in_field)
+    print("--- %i new total objects" % N_objs_pbh)
+
+    if N_objs_pbh == N_objs_no_pbh + N_PBHs_in_field:
+        print("Binned PBHs equals total PBHs")
+    else:
+        print("** MISSING PBHs!! **")
+
+    print("add_pbh runtime: {0:f} s".format(t1 - t0))
     return
 
 
@@ -2085,9 +2951,18 @@ def add_pbh(hdf5_file, ebf_file, fdm=1, pbh_mass=40,
 ########### Candidate event calculation and associated functions ###########
 ############################################################################
 
-def _check_calc_events(hdf5_file, output_root2,
-                       radius_cut, obs_time, n_obs, theta_frac,
-                       blend_rad, n_proc, overwrite):
+
+def _check_calc_events(
+    hdf5_file,
+    output_root2,
+    radius_cut,
+    obs_time,
+    n_obs,
+    theta_frac,
+    blend_rad,
+    n_proc,
+    overwrite,
+):
     """
     Checks that the inputs of calc_events are valid
 
@@ -2124,42 +2999,57 @@ def _check_calc_events(hdf5_file, output_root2,
         function if output files are already on disk.
         Default is False.
     """
-    if hdf5_file[-3:] != '.h5':
-        raise Exception('hdf5_file (%s) must be an h5 file.' % str(hdf5_file))
+    if hdf5_file[-3:] != ".h5":
+        raise Exception("hdf5_file (%s) must be an h5 file." % str(hdf5_file))
 
     if type(output_root2) != str:
-        raise Exception('output_root2 (%s) must be a string.' % str(output_root2))
+        raise Exception("output_root2 (%s) must be a string." % str(output_root2))
 
     if type(radius_cut) != int:
         if type(radius_cut) != float:
-            raise Exception('radius_cut (%s) must be an integer or a float.' % str(radius_cut))
+            raise Exception(
+                "radius_cut (%s) must be an integer or a float." % str(radius_cut)
+            )
 
     if type(obs_time) != int:
         if type(obs_time) != float:
-            raise Exception('obs_time (%s) must be an integer or a float.' % str(obs_time))
+            raise Exception(
+                "obs_time (%s) must be an integer or a float." % str(obs_time)
+            )
 
     if type(blend_rad) != int:
         if type(blend_rad) != float:
-            raise Exception('blend_rad (%s) must be an integer or a float.' % str(blend_rad))
+            raise Exception(
+                "blend_rad (%s) must be an integer or a float." % str(blend_rad)
+            )
 
     if type(n_obs) != int:
-        raise Exception('n_obs (%s) must be an integer.' % str(n_obs))
+        raise Exception("n_obs (%s) must be an integer." % str(n_obs))
 
     if type(n_proc) != int:
-        raise Exception('n_proc (%s) must be an integer.' % str(n_proc))
+        raise Exception("n_proc (%s) must be an integer." % str(n_proc))
 
     if type(overwrite) != bool:
-        raise Exception('overwrite (%s) must be a boolean.' % str(overwrite))
+        raise Exception("overwrite (%s) must be a boolean." % str(overwrite))
 
     if type(theta_frac) != int:
         if type(theta_frac) != float:
-            raise Exception('theta_frac (%s) must be an integer or a float.' % str(theta_frac))
+            raise Exception(
+                "theta_frac (%s) must be an integer or a float." % str(theta_frac)
+            )
 
 
-def calc_events(hdf5_file, output_root2,
-                radius_cut=2, obs_time=1000, n_obs=101, theta_frac=2,
-                blend_rad=0.65, n_proc=1,
-                overwrite=False):
+def calc_events(
+    hdf5_file,
+    output_root2,
+    radius_cut=2,
+    obs_time=1000,
+    n_obs=101,
+    theta_frac=2,
+    blend_rad=0.65,
+    n_proc=1,
+    overwrite=False,
+):
     """
     Calculate microlensing events
 
@@ -2215,19 +3105,29 @@ def calc_events(hdf5_file, output_root2,
     # Check if .fits file exists already. If it does, throw an error message
     # to complain and exit.
     if not overwrite:
-        if os.path.isfile(output_root2 + '_events.fits'):
+        if os.path.isfile(output_root2 + "_events.fits"):
             raise Exception(
-                'That events.fits file name is taken! Either delete the .fits '
-                'file, or pick a new name.')
-        if os.path.isfile(output_root2 + '_blends.fits'):
+                "That events.fits file name is taken! Either delete the .fits "
+                "file, or pick a new name."
+            )
+        if os.path.isfile(output_root2 + "_blends.fits"):
             raise Exception(
-                'That blends.fits file name is taken! Either delete the .fits '
-                'file, or pick a new name.')
+                "That blends.fits file name is taken! Either delete the .fits "
+                "file, or pick a new name."
+            )
 
     # Error handling/complaining if input types are not right.
-    _check_calc_events(hdf5_file, output_root2,
-                       radius_cut, obs_time, n_obs, theta_frac,
-                       blend_rad, n_proc, overwrite)
+    _check_calc_events(
+        hdf5_file,
+        output_root2,
+        radius_cut,
+        obs_time,
+        n_obs,
+        theta_frac,
+        blend_rad,
+        n_proc,
+        overwrite,
+    )
 
     ##########
     # Start of code
@@ -2240,9 +3140,9 @@ def calc_events(hdf5_file, output_root2,
     blends_tmp = None
 
     # Get the l and b from the HDF5 file.
-    hf = h5py.File(hdf5_file, 'r')
-    l_array = np.array(hf['long_bin_edges'])
-    b_array = np.array(hf['lat_bin_edges'])
+    hf = h5py.File(hdf5_file, "r")
+    l_array = np.array(hf["long_bin_edges"])
+    b_array = np.array(hf["lat_bin_edges"])
     hf.close()
 
     # Converts radius_cut from arcseconds into milliarcseconds
@@ -2307,18 +3207,18 @@ def calc_events(hdf5_file, output_root2,
         events_tmp = unique_events(events_tmp)
         events_final = Table(events_tmp)
         N_events = len(events_final)
-        print('Candidate events detected: ', N_events)
+        print("Candidate events detected: ", N_events)
 
         if len(results_bl) != 0:
             blends_tmp = unique_blends(blends_tmp)
         blends_final = Table(blends_tmp)
 
         # Save out file
-        events_final.write(output_root2 + '_events.fits', overwrite=overwrite)
-        blends_final.write(output_root2 + '_blends.fits', overwrite=overwrite)
+        events_final.write(output_root2 + "_events.fits", overwrite=overwrite)
+        blends_final.write(output_root2 + "_blends.fits", overwrite=overwrite)
     else:
         N_events = 0
-        print('No events!')
+        print("No events!")
     t1 = time.time()
 
     ##########
@@ -2327,51 +3227,79 @@ def calc_events(hdf5_file, output_root2,
     now = datetime.datetime.now()
     radius_cut = radius_cut / 1000.0  # back to arcsec
     popsycle_path = os.path.dirname(inspect.getfile(perform_pop_syn))
-    popsycle_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                            cwd=popsycle_path).decode('ascii').strip()
-    dash_line = '-----------------------------' + '\n'
-    empty_line = '\n'
-    line0 = 'FUNCTION INPUT PARAMETERS' + '\n'
-    line1 = 'hdf5_file , ' + hdf5_file + '\n'
-    line2 = 'output_root2 , ' + output_root2 + '\n'
-    line3 = 'radius_cut , ' + str(radius_cut) + ' , (arcsec)' + '\n'
-    line4 = 'obs_time , ' + str(obs_time) + ' , (days)' + '\n'
-    line5 = 'n_obs , ' + str(n_obs) + '\n'
-    line6 = 'theta_frac , ' + str(theta_frac) + ' , (thetaE)' + '\n'
-    line7 = 'blend_rad , ' + str(blend_rad) + ' , (arcsec)' + '\n'
-    line8 = 'n_proc , ' + str(n_proc) + '\n'
+    popsycle_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popsycle_path)
+        .decode("ascii")
+        .strip()
+    )
+    dash_line = "-----------------------------" + "\n"
+    empty_line = "\n"
+    line0 = "FUNCTION INPUT PARAMETERS" + "\n"
+    line1 = "hdf5_file , " + hdf5_file + "\n"
+    line2 = "output_root2 , " + output_root2 + "\n"
+    line3 = "radius_cut , " + str(radius_cut) + " , (arcsec)" + "\n"
+    line4 = "obs_time , " + str(obs_time) + " , (days)" + "\n"
+    line5 = "n_obs , " + str(n_obs) + "\n"
+    line6 = "theta_frac , " + str(theta_frac) + " , (thetaE)" + "\n"
+    line7 = "blend_rad , " + str(blend_rad) + " , (arcsec)" + "\n"
+    line8 = "n_proc , " + str(n_proc) + "\n"
 
-    line9 = 'VERSION INFORMATION' + '\n'
-    line10 = str(now) + ' : creation date' + '\n'
-    line11 = popsycle_hash + ' : PopSyCLE commit' + '\n'
+    line9 = "VERSION INFORMATION" + "\n"
+    line10 = str(now) + " : creation date" + "\n"
+    line11 = popsycle_hash + " : PopSyCLE commit" + "\n"
 
-    line12 = 'OTHER INFORMATION' + '\n'
-    line13 = str(t1 - t0) + ' : total runtime (s)' + '\n'
-    line14 = str(N_events) + ' : total number of events' + '\n'
+    line12 = "OTHER INFORMATION" + "\n"
+    line13 = str(t1 - t0) + " : total runtime (s)" + "\n"
+    line14 = str(N_events) + " : total number of events" + "\n"
 
     if N_events > 0:
-        line15 = 'FILES CREATED' + '\n'
-        line16 = output_root2 + '_events.fits : events file' + '\n'
-        line17 = output_root2 + '_blends.fits : blends file' + '\n'
+        line15 = "FILES CREATED" + "\n"
+        line16 = output_root2 + "_events.fits : events file" + "\n"
+        line17 = output_root2 + "_blends.fits : blends file" + "\n"
     else:
-        line15 = 'NO FILES CREATED' + '\n'
-        line16 = '\n'
-        line17 = '\n'
+        line15 = "NO FILES CREATED" + "\n"
+        line16 = "\n"
+        line17 = "\n"
 
-    with open(output_root2 + '_calc_events.log', 'w') as out:
-        out.writelines([line0, dash_line, line1, line2, line3,
-                        line4, line5, line6, line7, line8, empty_line,
-                        line9, dash_line, line10, line11, empty_line,
-                        line12, dash_line, line13, line14, empty_line, line15,
-                        dash_line, line16, line17])
+    with open(output_root2 + "_calc_events.log", "w") as out:
+        out.writelines(
+            [
+                line0,
+                dash_line,
+                line1,
+                line2,
+                line3,
+                line4,
+                line5,
+                line6,
+                line7,
+                line8,
+                empty_line,
+                line9,
+                dash_line,
+                line10,
+                line11,
+                empty_line,
+                line12,
+                dash_line,
+                line13,
+                line14,
+                empty_line,
+                line15,
+                dash_line,
+                line16,
+                line17,
+            ]
+        )
 
-    print('calc_events runtime : {0:f} s'.format(t1 - t0))
+    print("calc_events runtime : {0:f} s".format(t1 - t0))
 
     return
 
 
-def _calc_event_time_loop(llbb, hdf5_file, obs_time, n_obs, radius_cut,
-                          theta_frac, blend_rad):
+def _calc_event_time_loop(
+    llbb, hdf5_file, obs_time, n_obs, radius_cut, theta_frac, blend_rad
+):
     """
     Parameters
     ----------
@@ -2404,13 +3332,13 @@ def _calc_event_time_loop(llbb, hdf5_file, obs_time, n_obs, radius_cut,
     ll = llbb[0]
     bb = llbb[1]
 
-    print('Working on loop ll, bb = ', ll, bb)
-    name00 = 'l' + str(ll) + 'b' + str(bb)
-    name01 = 'l' + str(ll) + 'b' + str(bb + 1)
-    name10 = 'l' + str(ll + 1) + 'b' + str(bb)
-    name11 = 'l' + str(ll + 1) + 'b' + str(bb + 1)
+    print("Working on loop ll, bb = ", ll, bb)
+    name00 = "l" + str(ll) + "b" + str(bb)
+    name01 = "l" + str(ll) + "b" + str(bb + 1)
+    name10 = "l" + str(ll + 1) + "b" + str(bb)
+    name11 = "l" + str(ll + 1) + "b" + str(bb + 1)
 
-    hf = h5py.File(hdf5_file, 'r')
+    hf = h5py.File(hdf5_file, "r")
     bigpatch = np.hstack((hf[name00], hf[name01], hf[name10], hf[name11]))
     hf.close()
 
@@ -2423,19 +3351,21 @@ def _calc_event_time_loop(llbb, hdf5_file, obs_time, n_obs, radius_cut,
 
     for i in np.arange(len(time_array)):
         # Find potential lenses and sources that fall within radius cut.
-        lens_id, sorc_id, r_t, sep, event_id1, c = _calc_event_cands_radius(bigpatch,
-                                                                            time_array[i],
-                                                                            radius_cut)
+        lens_id, sorc_id, r_t, sep, event_id1, c = _calc_event_cands_radius(
+            bigpatch, time_array[i], radius_cut
+        )
 
         # Calculate einstein radius and lens-source separation
-        theta_E = einstein_radius(bigpatch['mass'][lens_id],
-                                  r_t[lens_id], r_t[sorc_id])  # mas
+        theta_E = einstein_radius(
+            bigpatch["mass"][lens_id], r_t[lens_id], r_t[sorc_id]
+        )  # mas
         u = sep[event_id1] / theta_E
 
         # Trim down to those microlensing events that really get close enough
         # to hope that we can detect them. Trim on a Theta_E criteria.
-        event_lbt = _calc_event_cands_thetaE(bigpatch, theta_E, u, theta_frac,
-                                             lens_id, sorc_id, time_array[i])
+        event_lbt = _calc_event_cands_thetaE(
+            bigpatch, theta_E, u, theta_frac, lens_id, sorc_id, time_array[i]
+        )
 
         if event_lbt is not None:
             # Concatenate the current event table
@@ -2509,14 +3439,19 @@ def _calc_event_cands_radius(bigpatch, timei, radius_cut):
         Coordinates of all the stars.
     """
     # Propagate r, b, l positions forward in time.
-    r_t = bigpatch['rad'] + timei * bigpatch['vr'] * kms_to_kpcday  # kpc
-    b_t = bigpatch['glat'] + timei * bigpatch['mu_b'] * masyr_to_degday  # deg
-    l_t = bigpatch['glon'] + timei * (bigpatch['mu_lcosb'] / np.cos(np.radians(bigpatch['glat']))) * masyr_to_degday  # deg
+    r_t = bigpatch["rad"] + timei * bigpatch["vr"] * kms_to_kpcday  # kpc
+    b_t = bigpatch["glat"] + timei * bigpatch["mu_b"] * masyr_to_degday  # deg
+    l_t = (
+        bigpatch["glon"]
+        + timei
+        * (bigpatch["mu_lcosb"] / np.cos(np.radians(bigpatch["glat"])))
+        * masyr_to_degday
+    )  # deg
 
     ##########
     # Determine nearest neighbor in spherical coordinates.
     ##########
-    c = SkyCoord(frame='galactic', l=l_t * units.deg, b=b_t * units.deg)
+    c = SkyCoord(frame="galactic", l=l_t * units.deg, b=b_t * units.deg)
 
     # NOTE: dist has no actual meaning since
     # we didn't input distances from Earth.
@@ -2534,9 +3469,9 @@ def _calc_event_cands_radius(bigpatch, timei, radius_cut):
     tot = len(l_t)
     dup = tot - uni
     if dup != 0:
-        print('****************** WARNING!!! ********************')
-        print('There are ' + str(dup) + ' duplicate (l, b) pairs.')
-        print('**************************************************')
+        print("****************** WARNING!!! ********************")
+        print("There are " + str(dup) + " duplicate (l, b) pairs.")
+        print("**************************************************")
 
     ##########
     # Find all objects with a nearest neighbor within an angular distance
@@ -2554,8 +3489,8 @@ def _calc_event_cands_radius(bigpatch, timei, radius_cut):
     idx_l1 = np.where(r_t[event_id1] < r_t[event_id2])[0]
     idx_l2 = np.where(r_t[event_id1] > r_t[event_id2])[0]
 
-    lens_id = np.zeros(len(event_id1), dtype='int')
-    sorc_id = np.zeros(len(event_id1), dtype='int')
+    lens_id = np.zeros(len(event_id1), dtype="int")
+    sorc_id = np.zeros(len(event_id1), dtype="int")
 
     lens_id[idx_l1] = event_id1[idx_l1]
     sorc_id[idx_l1] = event_id2[idx_l1]
@@ -2566,8 +3501,7 @@ def _calc_event_cands_radius(bigpatch, timei, radius_cut):
     return lens_id, sorc_id, r_t, sep, event_id1, c
 
 
-def _calc_event_cands_thetaE(bigpatch, theta_E, u, theta_frac, lens_id,
-                             sorc_id, timei):
+def _calc_event_cands_thetaE(bigpatch, theta_E, u, theta_frac, lens_id, sorc_id, timei):
     """
     Get sources and lenses that pass the radius cut.
 
@@ -2606,13 +3540,18 @@ def _calc_event_cands_thetaE(bigpatch, theta_E, u, theta_frac, lens_id,
     if len(adx > 0):
         # Narrow down to unique pairs of stars... don't double calculate
         # an event.
-        lens_sorc_id_pairs = np.stack((bigpatch['obj_id'][lens_id][adx],
-                                       bigpatch['obj_id'][sorc_id][adx]),
-                                      axis=-1)
+        lens_sorc_id_pairs = np.stack(
+            (bigpatch["obj_id"][lens_id][adx], bigpatch["obj_id"][sorc_id][adx]),
+            axis=-1,
+        )
 
-        unique_returns = np.unique(lens_sorc_id_pairs,
-                                   return_index=True, return_inverse=True,
-                                   return_counts=True, axis=0)
+        unique_returns = np.unique(
+            lens_sorc_id_pairs,
+            return_index=True,
+            return_inverse=True,
+            return_counts=True,
+            axis=0,
+        )
         unique_tab = unique_returns[0]
         unique_indices = unique_returns[1]
         unique_inverse = unique_returns[2]
@@ -2625,37 +3564,32 @@ def _calc_event_cands_thetaE(bigpatch, theta_E, u, theta_frac, lens_id,
         theta_E = theta_E[adx][unique_indices]
         u = u[adx][unique_indices]
 
-        mu_b_rel = sorc_table['mu_b'] - lens_table['mu_b']  # mas/yr
-        mu_lcosb_rel = sorc_table['mu_lcosb'] - lens_table['mu_lcosb']  # mas/yr
-        mu_rel = np.sqrt(mu_b_rel ** 2 + mu_lcosb_rel ** 2)  # mas/yr
+        mu_b_rel = sorc_table["mu_b"] - lens_table["mu_b"]  # mas/yr
+        mu_lcosb_rel = sorc_table["mu_lcosb"] - lens_table["mu_lcosb"]  # mas/yr
+        mu_rel = np.sqrt(mu_b_rel**2 + mu_lcosb_rel**2)  # mas/yr
         t_event = np.ones(len(mu_rel), dtype=float) * timei  # days
 
         # This is all the events for this l, b, time
         # Loop through the lens table and append '_L' to the end of each field
         lens_rename_dct = {}
         for name in lens_table.dtype.names:
-            lens_rename_dct[name] = name + '_L'
+            lens_rename_dct[name] = name + "_L"
         lens_table = rfn.rename_fields(lens_table, lens_rename_dct)
 
         # Loop through the source table and append '_S' to the end of each field
         sorc_rename_dct = {}
         for name in sorc_table.dtype.names:
-            sorc_rename_dct[name] = name + '_S'
+            sorc_rename_dct[name] = name + "_S"
         sorc_table = rfn.rename_fields(sorc_table, sorc_rename_dct)
 
         # Combine the lens and source tables into the events table
-        event_lbt = rfn.merge_arrays((lens_table, sorc_table),
-                                     flatten=True)
+        event_lbt = rfn.merge_arrays((lens_table, sorc_table), flatten=True)
 
         # Add additional microlensing parameters to the events table
-        event_lbt = rfn.append_fields(event_lbt, 'theta_E',
-                                      theta_E, usemask=False)
-        event_lbt = rfn.append_fields(event_lbt, 'u0',
-                                      u.value, usemask=False)
-        event_lbt = rfn.append_fields(event_lbt, 'mu_rel',
-                                      mu_rel, usemask=False)
-        event_lbt = rfn.append_fields(event_lbt, 't0',
-                                      t_event, usemask=False)
+        event_lbt = rfn.append_fields(event_lbt, "theta_E", theta_E, usemask=False)
+        event_lbt = rfn.append_fields(event_lbt, "u0", u.value, usemask=False)
+        event_lbt = rfn.append_fields(event_lbt, "mu_rel", mu_rel, usemask=False)
+        event_lbt = rfn.append_fields(event_lbt, "t0", t_event, usemask=False)
         return event_lbt
 
     else:
@@ -2695,12 +3629,14 @@ def _calc_blends(bigpatch, c, event_lbt, blend_rad):
     # This way, we don't have to remake a tree that already exists.
     # (We didn't just do the neighbor calculation initially, because
     # it would be expensive to hold onto all the unnecessary neighbors)
-    kdtree_cache = c.cache['kdtree_sky']
+    kdtree_cache = c.cache["kdtree_sky"]
 
     # Define the center of the blending disk (the lens)
-    coords_lbt = SkyCoord(frame='galactic',
-                          l=np.array(event_lbt['glon_L']) * units.deg,
-                          b=np.array(event_lbt['glat_L']) * units.deg)
+    coords_lbt = SkyCoord(
+        frame="galactic",
+        l=np.array(event_lbt["glon_L"]) * units.deg,
+        b=np.array(event_lbt["glat_L"]) * units.deg,
+    )
 
     ##########
     # Replicate astropy's search_around_sky.
@@ -2737,15 +3673,14 @@ def _calc_blends(bigpatch, c, event_lbt, blend_rad):
         # bidx indexes into results.
         # It should be that len(results[ii]) == len(bidx) + 2 (we get rid of source and lens.)
         # neighbor star object id
-        nid = bigpatch['obj_id'][results[ii]]
+        nid = bigpatch["obj_id"][results[ii]]
         # lens star object id
-        lid = np.array(event_lbt['obj_id_L'][ii])
+        lid = np.array(event_lbt["obj_id_L"][ii])
         # source star object id
-        sid = np.array(event_lbt['obj_id_S'][ii])
+        sid = np.array(event_lbt["obj_id_S"][ii])
 
         # Fetch the things that are not the lens and the source.
-        bidx = np.where((nid != lid) &
-                        (nid != sid))[0]
+        bidx = np.where((nid != lid) & (nid != sid))[0]
 
         if len(bidx) == 0:
             continue
@@ -2755,12 +3690,16 @@ def _calc_blends(bigpatch, c, event_lbt, blend_rad):
         tmp_sorc_id = np.repeat(sid, len(bidx)).tolist()
 
         # Calculate the distance from lens to each neighbor.
-        lens_lb = SkyCoord(frame='galactic',
-                           l=np.array(event_lbt['glon_L'][ii]) * units.deg,
-                           b=np.array(event_lbt['glat_L'][ii]) * units.deg)
-        neigh_lb = SkyCoord(frame='galactic',
-                            l=bigpatch['glon'][results[ii]][bidx] * units.deg,
-                            b=bigpatch['glat'][results[ii]][bidx] * units.deg)
+        lens_lb = SkyCoord(
+            frame="galactic",
+            l=np.array(event_lbt["glon_L"][ii]) * units.deg,
+            b=np.array(event_lbt["glat_L"][ii]) * units.deg,
+        )
+        neigh_lb = SkyCoord(
+            frame="galactic",
+            l=bigpatch["glon"][results[ii]][bidx] * units.deg,
+            b=bigpatch["glat"][results[ii]][bidx] * units.deg,
+        )
         sep_LN = lens_lb.separation(neigh_lb)
         sep_LN = (sep_LN.to(units.arcsec)) / units.arcsec
 
@@ -2787,16 +3726,17 @@ def _calc_blends(bigpatch, c, event_lbt, blend_rad):
         # Append '_N' to each column in blends_lbt
         blends_rename_dct = {}
         for name in blends_lbt.dtype.names:
-            blends_rename_dct[name] = name + '_N'
+            blends_rename_dct[name] = name + "_N"
         blends_lbt = rfn.rename_fields(blends_lbt, blends_rename_dct)
 
         # Add additional columns into blends_lbt
-        blends_lbt = rfn.append_fields(blends_lbt, 'obj_id_L',
-                                       blend_lens_obj_id, usemask=False)
-        blends_lbt = rfn.append_fields(blends_lbt, 'obj_id_S',
-                                       blend_sorc_obj_id, usemask=False)
-        blends_lbt = rfn.append_fields(blends_lbt, 'sep_LN',
-                                       sep_LN_list, usemask=False)
+        blends_lbt = rfn.append_fields(
+            blends_lbt, "obj_id_L", blend_lens_obj_id, usemask=False
+        )
+        blends_lbt = rfn.append_fields(
+            blends_lbt, "obj_id_S", blend_sorc_obj_id, usemask=False
+        )
+        blends_lbt = rfn.append_fields(blends_lbt, "sep_LN", sep_LN_list, usemask=False)
     else:
         blends_lbt = None
 
@@ -2814,7 +3754,7 @@ def unique_events(event_table):
 
     Parameters
     ---------
-    event_table : numpy array 
+    event_table : numpy array
         A table with all the events. There are equal numbers of columns
         containing info about the source and the lens, and four additional
         columns with theta_E, u0, mu_rel, and t0. The number of rows
@@ -2830,14 +3770,14 @@ def unique_events(event_table):
     """
     # Pull the unique ID numbers for the lens and source and put them into a
     # table of 2 x N_lenses.
-    lens_uid = event_table['obj_id_L']
-    sorc_uid = event_table['obj_id_S']
+    lens_uid = event_table["obj_id_L"]
+    sorc_uid = event_table["obj_id_S"]
     events_uid = np.swapaxes(np.vstack((lens_uid, sorc_uid)), 0, 1)
 
     # Determine if we have unique events (and how many duplicates there are).
-    unique_returns = np.unique(events_uid,
-                               return_index=True, return_inverse=True,
-                               return_counts=True, axis=0)
+    unique_returns = np.unique(
+        events_uid, return_index=True, return_inverse=True, return_counts=True, axis=0
+    )
     unique_tab = unique_returns[0]
     unique_indices = unique_returns[1]
     unique_inverse = unique_returns[2]
@@ -2851,7 +3791,7 @@ def unique_events(event_table):
         # Fetch the duplicates for this event.
         dup_idx = np.where(unique_inverse == dpdx[ii])[0]
         dup_events = event_table[dup_idx]
-        min_idx = np.argmin(dup_events['u0'])
+        min_idx = np.argmin(dup_events["u0"])
         new_event_table[dpdx[ii]] = event_table[dup_idx[min_idx]]
 
     return new_event_table
@@ -2866,7 +3806,7 @@ def unique_blends(blend_table):
 
     Parameters
     ---------
-    blend_table : blend array 
+    blend_table : blend array
         A table with all the events. There is 1 column with the unique
         source ID, 1 with the unique lens ID lens, 1 with the lens-neighbor
         separation, and the remaining columns contain info about the neighbors.
@@ -2882,14 +3822,13 @@ def unique_blends(blend_table):
     """
     # Pull the unique ID numbers for the lens, source, and neighbors and put
     # them into a table of 3 x N_blends.
-    lens_obj_id = blend_table['obj_id_L']
-    sorc_obj_id = blend_table['obj_id_S']
-    neigh_obj_id = blend_table['obj_id_N']
+    lens_obj_id = blend_table["obj_id_L"]
+    sorc_obj_id = blend_table["obj_id_S"]
+    neigh_obj_id = blend_table["obj_id_N"]
 
-    triples_obj_id = np.swapaxes(np.vstack((lens_obj_id,
-                                            sorc_obj_id,
-                                            neigh_obj_id)),
-                                 0, 1)
+    triples_obj_id = np.swapaxes(
+        np.vstack((lens_obj_id, sorc_obj_id, neigh_obj_id)), 0, 1
+    )
 
     # Determine if we have unique events (and how many duplicates there are).
     # We will keep the first occurence.
@@ -2914,18 +3853,19 @@ def calc_diff_limit_blend(event_fits_file, blend_fits_file, blend_rad):
     blend = Table.read(blend_fits_file)
 
     for i in range(len(blend)):
-        lens_id = blend[i]['obj_id_L']
-        sorc_id = blend[i]['obj_id_S']
+        lens_id = blend[i]["obj_id_L"]
+        sorc_id = blend[i]["obj_id_S"]
         event_idx = np.where(
-            (event['obj_id_L'] == lens_id) & (event['obj_id_S'] == sorc_id))[0]
+            (event["obj_id_L"] == lens_id) & (event["obj_id_S"] == sorc_id)
+        )[0]
 
-        l_L = event[event_idx]['glon_L']
-        b_L = event[event_idx]['glat_L']
-        c_L = SkyCoord(frame='galactic', l=l_L * units.deg, b=b_L * units.deg)
+        l_L = event[event_idx]["glon_L"]
+        b_L = event[event_idx]["glat_L"]
+        c_L = SkyCoord(frame="galactic", l=l_L * units.deg, b=b_L * units.deg)
 
-        l_N = blend[i]['glon_N']
-        b_N = blend[i]['glat_N']
-        c_N = SkyCoord(frame='galactic', l=l_N * units.deg, b=b_N * units.deg)
+        l_N = blend[i]["glon_N"]
+        b_N = blend[i]["glat_N"]
+        c_N = SkyCoord(frame="galactic", l=l_N * units.deg, b=b_N * units.deg)
 
         sep = (c_L.separation(c_N)).arcsec
 
@@ -2935,7 +3875,7 @@ def calc_diff_limit_blend(event_fits_file, blend_fits_file, blend_rad):
             else:
                 diff_limit_blend = blend[i]
 
-    diff_limit_blend.write('diff_limit_blend_' + str(blend_rad) + '.fits')
+    diff_limit_blend.write("diff_limit_blend_" + str(blend_rad) + ".fits")
 
     return
 
@@ -2965,33 +3905,32 @@ def reduce_blend_rad(blend_tab, new_blend_rad, output_root, overwrite=False):
         New table with smaller blend radius.
 
     """
-    input_root = blend_tab.rstrip('_blends.fits')
+    input_root = blend_tab.rstrip("_blends.fits")
 
-    event_tab_name = input_root + '_events.fits'
-    event_log_name = input_root + '_calc_events.log'
+    event_tab_name = input_root + "_events.fits"
+    event_log_name = input_root + "_calc_events.log"
 
-    new_event_tab_name = output_root + '_events.fits'
-    new_event_log_name = output_root + '_calc_events.log'
-    new_blend_tab_name = output_root + '_blends.fits'
+    new_event_tab_name = output_root + "_events.fits"
+    new_event_log_name = output_root + "_calc_events.log"
+    new_blend_tab_name = output_root + "_blends.fits"
 
-    os.system('cp %s %s' % (event_tab_name, new_event_tab_name))
-    os.system('cp %s %s' % (event_log_name, new_event_log_name))
+    os.system("cp %s %s" % (event_tab_name, new_event_tab_name))
+    os.system("cp %s %s" % (event_log_name, new_event_log_name))
 
     now = datetime.datetime.now()
-    dash_line = '-----------------------------' + '\n'
+    dash_line = "-----------------------------" + "\n"
 
-    line0 = 'NEW BLEND RADIUS INFO AND FILES CREATED' + '\n'
-    line1 = 'new blend rad : ' + str(new_blend_rad) + ' (arcsec)' + '\n'
-    line2 = 'blend file : ' + new_blend_tab_name + '\n'
-    line3 = 'event file : ' + new_event_tab_name + '\n'
-    line4 = 'creation time: ' + str(now) + '\n'
+    line0 = "NEW BLEND RADIUS INFO AND FILES CREATED" + "\n"
+    line1 = "new blend rad : " + str(new_blend_rad) + " (arcsec)" + "\n"
+    line2 = "blend file : " + new_blend_tab_name + "\n"
+    line3 = "event file : " + new_event_tab_name + "\n"
+    line4 = "creation time: " + str(now) + "\n"
 
-    with open(new_event_log_name, 'a') as my_file:
-        my_file.writelines(['\n', line0, dash_line,
-                            line1, line2, line3, line4])
+    with open(new_event_log_name, "a") as my_file:
+        my_file.writelines(["\n", line0, dash_line, line1, line2, line3, line4])
 
     old_blends = Table.read(blend_tab)
-    good_idx = np.where(old_blends['sep_LN'] < new_blend_rad)[0]
+    good_idx = np.where(old_blends["sep_LN"] < new_blend_rad)[0]
     new_blends = old_blends[good_idx]
 
     new_blends.write(new_blend_tab_name, overwrite=overwrite)
@@ -3004,16 +3943,16 @@ def reduce_blend_rad(blend_tab, new_blend_rad, output_root, overwrite=False):
 ############################################################################
 
 
-def _convert_photometric_99_to_nan(table, photometric_system='ubv'):
+def _convert_photometric_99_to_nan(table, photometric_system="ubv"):
     for name in table.colnames:
-        if ('exbv' in name) or (photometric_system in name):
+        if ("exbv" in name) or (photometric_system in name):
             cond = np.where(table[name] == -99)[0]
             table[name][cond] = np.nan
 
 
-def _check_refine_events(input_root, filter_name,
-                         photometric_system, red_law, overwrite,
-                         output_file):
+def _check_refine_events(
+    input_root, filter_name, photometric_system, red_law, overwrite, output_file
+):
     """
     Checks that the inputs of refine_events are valid
 
@@ -3040,56 +3979,69 @@ def _check_refine_events(input_root, filter_name,
         Default is False.
     """
     if type(input_root) != str:
-        raise Exception('input_root (%s) must be a string.' % str(input_root))
+        raise Exception("input_root (%s) must be a string." % str(input_root))
 
     if type(filter_name) != str:
-        raise Exception('filter_name (%s) must be a string.' % str(filter_name))
+        raise Exception("filter_name (%s) must be a string." % str(filter_name))
 
     if type(photometric_system) != str:
-        raise Exception('photometric_system (%s) must be a string.' % str(photometric_system))
+        raise Exception(
+            "photometric_system (%s) must be a string." % str(photometric_system)
+        )
 
     if type(red_law) != str:
-        raise Exception('red_law (%s) must be a string.' % str(red_law))
+        raise Exception("red_law (%s) must be a string." % str(red_law))
 
     if type(output_file) != str:
-        raise Exception('output_file (%s) must be a string.' % str(output_file))
+        raise Exception("output_file (%s) must be a string." % str(output_file))
 
     if type(overwrite) != bool:
-        raise Exception('overwrite (%s) must be a boolean.' % str(overwrite))
+        raise Exception("overwrite (%s) must be a boolean." % str(overwrite))
 
     # Check to see that the filter name, photometric system, red_law are valid
     if photometric_system not in photometric_system_dict:
-        exception_str = 'photometric_system must be a key in ' \
-                        'photometric_system_dict. \n' \
-                        'Acceptable values are : '
+        exception_str = (
+            "photometric_system must be a key in "
+            "photometric_system_dict. \n"
+            "Acceptable values are : "
+        )
         for photometric_system in photometric_system_dict:
-            exception_str += '%s, ' % photometric_system
+            exception_str += "%s, " % photometric_system
         exception_str = exception_str[:-2]
         raise Exception(exception_str)
 
     if filter_name not in photometric_system_dict[photometric_system]:
-        exception_str = 'filter_name must be a value in ' \
-                        'photometric_system_dict[%s]. \n' \
-                        'Acceptable values are : ' % photometric_system
+        exception_str = (
+            "filter_name must be a value in "
+            "photometric_system_dict[%s]. \n"
+            "Acceptable values are : " % photometric_system
+        )
         for filter_name in photometric_system_dict[photometric_system]:
-            exception_str += '%s, ' % filter_name
+            exception_str += "%s, " % filter_name
         exception_str = exception_str[:-2]
         raise Exception(exception_str)
 
-    key = photometric_system + '_' + filter_name
+    key = photometric_system + "_" + filter_name
     if red_law not in filt_dict[key]:
-        exception_str = 'red_law must be a value in ' \
-                        'filt_dict[%s]. \n' \
-                        'Acceptable values are : ' % key
+        exception_str = (
+            "red_law must be a value in "
+            "filt_dict[%s]. \n"
+            "Acceptable values are : " % key
+        )
         for red_law in filt_dict[key]:
-            exception_str += '%s, ' % red_law
+            exception_str += "%s, " % red_law
         exception_str = exception_str[:-2]
         raise Exception(exception_str)
 
 
-def refine_events(input_root, filter_name, photometric_system, red_law,
-                  overwrite=False,
-                  output_file='default'):
+def refine_events(
+    input_root,
+    filter_name,
+    photometric_system,
+    red_law,
+    overwrite=False,
+    output_file="default",
+):
     """
     Takes the output Astropy table from calc_events, and from that
     calculates the time of closest approach. Will also return source-lens
@@ -3135,25 +4087,26 @@ def refine_events(input_root, filter_name, photometric_system, red_law,
     # Check if .fits file exists already. If it does, throw an error message
     # to complain and exit.
     if not overwrite and os.path.isfile(output_file):
-        raise Exception('That refined_events.fits file name is taken! '
-                        'Either delete the .fits file, or pick a new name.')
+        raise Exception(
+            "That refined_events.fits file name is taken! "
+            "Either delete the .fits file, or pick a new name."
+        )
 
     # Error handling/complaining if input types are not right.
-    _check_refine_events(input_root, filter_name,
-                         photometric_system, red_law,
-                         overwrite, output_file)
+    _check_refine_events(
+        input_root, filter_name, photometric_system, red_law, overwrite, output_file
+    )
 
-    if output_file == 'default':
-        output_file = '{0:s}_refined_events_{1:s}_{2:s}_{3:s}.fits'.format(input_root,
-                                                                           photometric_system,
-                                                                           filter_name,
-                                                                           red_law)
+    if output_file == "default":
+        output_file = "{0:s}_refined_events_{1:s}_{2:s}_{3:s}.fits".format(
+            input_root, photometric_system, filter_name, red_law
+        )
 
     t_0 = time.time()
 
-    event_fits_file = input_root + '_events.fits'
-    blend_fits_file = input_root + '_blends.fits'
-    log_file = input_root + '_calc_events.log'
+    event_fits_file = input_root + "_events.fits"
+    blend_fits_file = input_root + "_blends.fits"
+    log_file = input_root + "_calc_events.log"
 
     event_tab = Table.read(event_fits_file)
     blend_tab = Table.read(blend_fits_file)
@@ -3163,12 +4116,14 @@ def refine_events(input_root, filter_name, photometric_system, red_law,
     _convert_photometric_99_to_nan(blend_tab, photometric_system)
 
     # Only keep events with luminous sources
-    event_tab = event_tab[~np.isnan(event_tab[photometric_system + '_' + filter_name + '_S'])]
+    event_tab = event_tab[
+        ~np.isnan(event_tab[photometric_system + "_" + filter_name + "_S"])
+    ]
 
     with open(log_file) as my_file:
         for num, line in enumerate(my_file):
-            if 'obs_time' in line:
-                obs_time = line.split(',')[1]
+            if "obs_time" in line:
+                obs_time = line.split(",")[1]
                 obs_time = float(obs_time)
                 break
 
@@ -3176,15 +4131,15 @@ def refine_events(input_root, filter_name, photometric_system, red_law,
     # NOTE: calc_closest_approach modifies the event table!
     # It trims out events that peak outside the survey range!
     N_events_original = len(event_tab)
-    print('Original candidate events: ', N_events_original)
+    print("Original candidate events: ", N_events_original)
     u0, t0 = calc_closest_approach(event_tab, obs_time)
     N_events_survey = len(event_tab)
-    print('Candidate events in survey window: ', N_events_survey)
-    event_tab['t0'] = t0  # days
-    event_tab['u0'] = u0
+    print("Candidate events in survey window: ", N_events_survey)
+    event_tab["t0"] = t0  # days
+    event_tab["u0"] = u0
     if len(event_tab) == 0:
-        print('No events!')
-        output_file = 'NO FILE CREATED'
+        print("No events!")
+        output_file = "NO FILE CREATED"
     else:
         ##########
         # Calculate apparent magnitudes
@@ -3192,20 +4147,22 @@ def refine_events(input_root, filter_name, photometric_system, red_law,
 
         # Einstein crossing time
         # THIS HAS TO GO BEFORE _CALC_OBSERVABLES
-        t_E = event_tab['theta_E'] / event_tab['mu_rel']  # yr
+        t_E = event_tab["theta_E"] / event_tab["mu_rel"]  # yr
         t_E *= 365.25  # days
-        event_tab['t_E'] = t_E  # days
+        event_tab["t_E"] = t_E  # days
 
         # Add stuff to event_tab... shouldn't have any direct outputs
-        _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_system)
+        _calc_observables(
+            filter_name, red_law, event_tab, blend_tab, photometric_system
+        )
 
         # Relative parallax
-        pi_rel = event_tab['rad_L'] ** -1 - event_tab['rad_S'] ** -1
-        event_tab['pi_rel'] = pi_rel  # mas
+        pi_rel = event_tab["rad_L"] ** -1 - event_tab["rad_S"] ** -1
+        event_tab["pi_rel"] = pi_rel  # mas
 
         # Microlensing parallax
-        pi_E = pi_rel / event_tab['theta_E']
-        event_tab['pi_E'] = pi_E  # dim'less
+        pi_E = pi_rel / event_tab["theta_E"]
+        event_tab["pi_E"] = pi_E  # dim'less
 
         event_tab.write(output_file, overwrite=overwrite)
 
@@ -3217,38 +4174,79 @@ def refine_events(input_root, filter_name, photometric_system, red_law,
     now = datetime.datetime.now()
     popsycle_path = os.path.dirname(inspect.getfile(perform_pop_syn))
     popstar_path = os.path.dirname(inspect.getfile(imf))
-    popsycle_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                             cwd=popsycle_path).decode('ascii').strip()
-    popstar_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                           cwd=popstar_path).decode('ascii').strip()
-    dash_line = '-----------------------------' + '\n'
-    empty_line = '\n'
+    popsycle_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popsycle_path)
+        .decode("ascii")
+        .strip()
+    )
+    popstar_hash = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=popstar_path)
+        .decode("ascii")
+        .strip()
+    )
+    dash_line = "-----------------------------" + "\n"
+    empty_line = "\n"
 
-    line0 = 'FUNCTION INPUT PARAMETERS' + '\n'
-    line1 = 'input_root : ' + input_root + '\n'
-    line2 = 'filter_name : ' + filter_name + '\n'
-    line3 = 'red_law : ' + red_law + '\n'
+    line0 = "FUNCTION INPUT PARAMETERS" + "\n"
+    line1 = "input_root : " + input_root + "\n"
+    line2 = "filter_name : " + filter_name + "\n"
+    line3 = "red_law : " + red_law + "\n"
 
-    line4 = 'VERSION INFORMATION' + '\n'
-    line5 = str(now) + ' : creation date' + '\n'
-    line6 = popstar_hash + ' : PopStar commit' + '\n'
-    line7 = popsycle_hash + ' : PopSyCLE commit' + '\n'
+    line4 = "VERSION INFORMATION" + "\n"
+    line5 = str(now) + " : creation date" + "\n"
+    line6 = popstar_hash + " : PopStar commit" + "\n"
+    line7 = popsycle_hash + " : PopSyCLE commit" + "\n"
 
-    line8 = 'OTHER INFORMATION' + '\n'
-    line9 = str(t_1 - t_0) + ' : total runtime (s)' + '\n'
-    line10 = str(N_events_original) + ' : original candidate events (dark sources removed)' + '\n'
-    line11 = str(N_events_survey) + ' : candidate events in survey window' + '\n'
+    line8 = "OTHER INFORMATION" + "\n"
+    line9 = str(t_1 - t_0) + " : total runtime (s)" + "\n"
+    line10 = (
+        str(N_events_original)
+        + " : original candidate events (dark sources removed)"
+        + "\n"
+    )
+    line11 = str(N_events_survey) + " : candidate events in survey window" + "\n"
 
-    line12 = 'FILES CREATED' + '\n'
-    line13 = output_file + ' : refined events'
+    line12 = "FILES CREATED" + "\n"
+    line13 = output_file + " : refined events"
 
-    with open(input_root + '_refined_events_' + photometric_system + '_' + filter_name + '_' + red_law + '.log', 'w') as out:
-        out.writelines([line0, dash_line, line1, line2, line3, empty_line,
-                        line4, dash_line, line5, line6, line7, empty_line,
-                        line8, dash_line, line9, line10, line11, empty_line,
-                        line12, dash_line, line13])
+    with open(
+        input_root
+        + "_refined_events_"
+        + photometric_system
+        + "_"
+        + filter_name
+        + "_"
+        + red_law
+        + ".log",
+        "w",
+    ) as out:
+        out.writelines(
+            [
+                line0,
+                dash_line,
+                line1,
+                line2,
+                line3,
+                empty_line,
+                line4,
+                dash_line,
+                line5,
+                line6,
+                line7,
+                empty_line,
+                line8,
+                dash_line,
+                line9,
+                line10,
+                line11,
+                empty_line,
+                line12,
+                dash_line,
+                line13,
+            ]
+        )
 
-    print('refine_events runtime : {0:f} s'.format(t_1 - t_0))
+    print("refine_events runtime : {0:f} s".format(t_1 - t_0))
     return
 
 
@@ -3282,16 +4280,18 @@ def calc_closest_approach(event_tab, survey_duration):
     end_time = survey_duration / 2.0  # days
 
     # Parametrization coefficients
-    cos_glat_S = np.cos(np.radians(event_tab['glat_S']))
-    cos_glat_L = np.cos(np.radians(event_tab['glat_L']))
+    cos_glat_S = np.cos(np.radians(event_tab["glat_S"]))
+    cos_glat_L = np.cos(np.radians(event_tab["glat_L"]))
 
-    l_0 = (event_tab['glon_S'] - event_tab['glon_L']) * cos_glat_L * 3600.0 * 1.0e3  # position, mas
-    l_1 = (event_tab['mu_lcosb_S'] - event_tab['mu_lcosb_L'])  # pm, mas/yr
-    b_0 = (event_tab['glat_S'] - event_tab['glat_L']) * 3600.0 * 1.0e3  # position, mas
-    b_1 = (event_tab['mu_b_S'] - event_tab['mu_b_L'])  # pm, mas/yr
+    l_0 = (
+        (event_tab["glon_S"] - event_tab["glon_L"]) * cos_glat_L * 3600.0 * 1.0e3
+    )  # position, mas
+    l_1 = event_tab["mu_lcosb_S"] - event_tab["mu_lcosb_L"]  # pm, mas/yr
+    b_0 = (event_tab["glat_S"] - event_tab["glat_L"]) * 3600.0 * 1.0e3  # position, mas
+    b_1 = event_tab["mu_b_S"] - event_tab["mu_b_L"]  # pm, mas/yr
 
     # Calculate the critical time (time of closest approach), global minimum
-    t_crit = -(l_0 * l_1 + b_0 * b_1) / (l_1 ** 2 + b_1 ** 2)  # years
+    t_crit = -(l_0 * l_1 + b_0 * b_1) / (l_1**2 + b_1**2)  # years
     t_crit *= 365.25  # days
 
     # Only include events that peak in survey window,
@@ -3330,24 +4330,30 @@ def calc_distance(event_tab, time):
 
     """
     # Calculate sep
-    cos_glat_S = np.cos(np.radians(event_tab['glat_S']))
-    cos_glat_L = np.cos(np.radians(event_tab['glat_L']))
+    cos_glat_S = np.cos(np.radians(event_tab["glat_S"]))
+    cos_glat_L = np.cos(np.radians(event_tab["glat_L"]))
 
-    l_L = (event_tab['glon_L'] + time * event_tab['mu_lcosb_L'] * masyr_to_degday / cos_glat_L)
-    b_L = (event_tab['glat_L'] + time * event_tab['mu_b_L'] * masyr_to_degday)
-    l_S = (event_tab['glon_S'] + time * event_tab['mu_lcosb_S'] * masyr_to_degday / cos_glat_S)
-    b_S = (event_tab['glat_S'] + time * event_tab['mu_b_S'] * masyr_to_degday)
+    l_L = (
+        event_tab["glon_L"]
+        + time * event_tab["mu_lcosb_L"] * masyr_to_degday / cos_glat_L
+    )
+    b_L = event_tab["glat_L"] + time * event_tab["mu_b_L"] * masyr_to_degday
+    l_S = (
+        event_tab["glon_S"]
+        + time * event_tab["mu_lcosb_S"] * masyr_to_degday / cos_glat_S
+    )
+    b_S = event_tab["glat_S"] + time * event_tab["mu_b_S"] * masyr_to_degday
 
-    c_L = SkyCoord(frame='galactic', l=l_L * units.deg, b=b_L * units.deg)
-    c_S = SkyCoord(frame='galactic', l=l_S * units.deg, b=b_S * units.deg)
+    c_L = SkyCoord(frame="galactic", l=l_L * units.deg, b=b_L * units.deg)
+    c_S = SkyCoord(frame="galactic", l=l_S * units.deg, b=b_S * units.deg)
 
     sep = (c_L.separation(c_S)).mas
-    u = sep / event_tab['theta_E']
+    u = sep / event_tab["theta_E"]
 
     return u
 
 
-def calc_blend_and_centroid(filter_name, red_law, blend_tab, photometric_system='ubv'):
+def calc_blend_and_centroid(filter_name, red_law, blend_tab, photometric_system="ubv"):
     """
     Given the absolute magnitudes of a bunch of things,
     calculate their blended apparent magnitude and flux.
@@ -3356,12 +4362,15 @@ def calc_blend_and_centroid(filter_name, red_law, blend_tab, photometric_system=
     Filter name is 'j', 'i', etc.
     red_law is Damineli16, Schlegel99, etc.
     """
-    f_i = filt_dict[photometric_system + '_' + filter_name][red_law]
+    f_i = filt_dict[photometric_system + "_" + filter_name][red_law]
 
     # Calculate apparent magnitudes
-    app_N = calc_app_mag(blend_tab['rad_N'],
-                         blend_tab[photometric_system + '_' + filter_name + '_N'],
-                         blend_tab['exbv_N'], f_i)
+    app_N = calc_app_mag(
+        blend_tab["rad_N"],
+        blend_tab[photometric_system + "_" + filter_name + "_N"],
+        blend_tab["exbv_N"],
+        f_i,
+    )
 
     # Convert absolute magnitudes to fluxes, and fix bad values
     flux_N = 10 ** (app_N / -2.5)
@@ -3376,8 +4385,8 @@ def calc_blend_and_centroid(filter_name, red_law, blend_tab, photometric_system=
         cent_l = 0.0
         cent_b = 0.0
     else:
-        cent_l = np.sum(flux_N * blend_tab['glon_N']) / flux_N_tot
-        cent_b = np.sum(flux_N * blend_tab['glat_N']) / flux_N_tot
+        cent_l = np.sum(flux_N * blend_tab["glon_N"]) / flux_N_tot
+        cent_b = np.sum(flux_N * blend_tab["glat_N"]) / flux_N_tot
 
     # Total blended magnitude
     app_blended = -2.5 * np.log10(flux_N_tot)
@@ -3385,7 +4394,9 @@ def calc_blend_and_centroid(filter_name, red_law, blend_tab, photometric_system=
     return app_blended, flux_N_tot, cent_l, cent_b
 
 
-def _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_system='ubv'):
+def _calc_observables(
+    filter_name, red_law, event_tab, blend_tab, photometric_system="ubv"
+):
     """
     Calculate a bunch of observable quantities we get out from microlensing
 
@@ -3400,17 +4411,23 @@ def _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_sy
     Return
     ------
     """
-    f_i = filt_dict[photometric_system + '_' + filter_name][red_law]
+    f_i = filt_dict[photometric_system + "_" + filter_name][red_law]
 
     # Calculate apparent magnitude of lens and source, and fix bad values
-    app_S = calc_app_mag(event_tab['rad_S'],
-                         event_tab[photometric_system + '_' + filter_name + '_S'],
-                         event_tab['exbv_S'], f_i)
-    app_L = calc_app_mag(event_tab['rad_L'],
-                         event_tab[photometric_system + '_' + filter_name + '_L'],
-                         event_tab['exbv_L'], f_i)
-    event_tab[photometric_system + '_' + filter_name + '_app_S'] = app_S
-    event_tab[photometric_system + '_' + filter_name + '_app_L'] = app_L
+    app_S = calc_app_mag(
+        event_tab["rad_S"],
+        event_tab[photometric_system + "_" + filter_name + "_S"],
+        event_tab["exbv_S"],
+        f_i,
+    )
+    app_L = calc_app_mag(
+        event_tab["rad_L"],
+        event_tab[photometric_system + "_" + filter_name + "_L"],
+        event_tab["exbv_L"],
+        f_i,
+    )
+    event_tab[photometric_system + "_" + filter_name + "_app_S"] = app_S
+    event_tab[photometric_system + "_" + filter_name + "_app_L"] = app_L
 
     # Convert absolute magnitude to fluxes, and fix bad values
     flux_L = 10 ** (app_L / -2.5)
@@ -3420,19 +4437,16 @@ def _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_sy
     flux_S = np.nan_to_num(flux_S)
 
     # Find the blends.
-    LS_pairs = np.stack((event_tab['obj_id_L'], event_tab['obj_id_S']),
-                        axis=-1)
-    blend_pairs = np.stack((blend_tab['obj_id_L'], blend_tab['obj_id_S']),
-                           axis=-1)
+    LS_pairs = np.stack((event_tab["obj_id_L"], event_tab["obj_id_S"]), axis=-1)
+    blend_pairs = np.stack((blend_tab["obj_id_L"], blend_tab["obj_id_S"]), axis=-1)
 
     flux_N = np.zeros(len(app_L))
-    event_tab['cent_glon_' + filter_name + '_N'] = np.zeros(len(app_L))
-    event_tab['cent_glat_' + filter_name + '_N'] = np.zeros(len(app_L))
+    event_tab["cent_glon_" + filter_name + "_N"] = np.zeros(len(app_L))
+    event_tab["cent_glat_" + filter_name + "_N"] = np.zeros(len(app_L))
 
     # Get the unique blend_pairs and the first instance of each.
     if len(blend_pairs) > 0:
-        uni_blends, uni_bidx = np.unique(blend_pairs, return_index=True,
-                                         axis=0)
+        uni_blends, uni_bidx = np.unique(blend_pairs, return_index=True, axis=0)
         # Add a "dummy" idx onto uni_bidx so that I can do idx+1 later.
         uni_bidxx = np.append(uni_bidx, len(blend_pairs))
     else:
@@ -3451,13 +4465,12 @@ def _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_sy
         if len(idx) > 0:
             start = uni_bidxx[idx][0]
             end = uni_bidxx[idx + 1][0]
-            app_blended, flux_N_tot, cent_l, cent_b = calc_blend_and_centroid(filter_name,
-                                                                              red_law,
-                                                                              blend_tab[start:end],
-                                                                              photometric_system)
+            app_blended, flux_N_tot, cent_l, cent_b = calc_blend_and_centroid(
+                filter_name, red_law, blend_tab[start:end], photometric_system
+            )
             flux_N[pp] = flux_N_tot
-            event_tab['cent_glon_' + filter_name + '_N'][pp] = cent_l
-            event_tab['cent_glat_' + filter_name + '_N'][pp] = cent_b
+            event_tab["cent_glon_" + filter_name + "_N"][pp] = cent_l
+            event_tab["cent_glat_" + filter_name + "_N"][pp] = cent_b
 
     # Total blended flux in i-band
     flux_tot = flux_L + flux_S + flux_N
@@ -3469,20 +4482,20 @@ def _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_sy
     app_N[good_N_idx] = -2.5 * np.log10(flux_N[good_N_idx])
     app_N[bad_N_idx] = np.full(len(bad_N_idx), np.nan)
 
-    event_tab[photometric_system + '_' + filter_name + '_app_N'] = app_N
+    event_tab[photometric_system + "_" + filter_name + "_app_N"] = app_N
 
     # Total blended magnitude
     app_LSN = -2.5 * np.log10(flux_tot)
-    event_tab[photometric_system + '_' + filter_name + '_app_LSN'] = app_LSN
+    event_tab[photometric_system + "_" + filter_name + "_app_LSN"] = app_LSN
 
     # Bump amplitude (in magnitudes)
-    delta_m = calc_bump_amp(event_tab['u0'], flux_S, flux_L, flux_N)
-    event_tab['delta_m_' + filter_name] = delta_m
+    delta_m = calc_bump_amp(event_tab["u0"], flux_S, flux_L, flux_N)
+    event_tab["delta_m_" + filter_name] = delta_m
 
     # Calculate the blend fraction
     # (commonly used in microlensing): f_source / f_total
     f_blend = flux_S / flux_tot
-    event_tab['f_blend_' + filter_name] = f_blend
+    event_tab["f_blend_" + filter_name] = f_blend
 
     return
 
@@ -3490,6 +4503,7 @@ def _calc_observables(filter_name, red_law, event_tab, blend_tab, photometric_sy
 ##################################################################
 ############ Reading/writing and format functions  ###############
 ##################################################################
+
 
 def make_ebf_log(ebf_table):
     """
@@ -3507,26 +4521,25 @@ def make_ebf_log(ebf_table):
 
     """
     if type(ebf_table) == dict:
-        log_list = ebf_table['log'][0].split(b'\n')
+        log_list = ebf_table["log"][0].split(b"\n")
 
-    if ebf_table[-4:] == '.ebf':
-        log_list = ebf.read(ebf_table, '/log')[0].split(b'\n')
+    if ebf_table[-4:] == ".ebf":
+        log_list = ebf.read(ebf_table, "/log")[0].split(b"\n")
 
     if type(ebf_table) == np.bytes_:
-        log_list = ebf_table.split(b'\n')
+        log_list = ebf_table.split(b"\n")
 
     ebf_log = {}
     for ii in range(len(log_list)):
         if len(log_list[ii]) == 0:
             continue
 
-        if log_list[ii].startswith(b'#'):
+        if log_list[ii].startswith(b"#"):
             continue
 
         log_list_entry = log_list[ii].split()
 
-        ebf_log[log_list_entry[0].decode('utf-8')] = log_list_entry[1].decode(
-            'utf-8')
+        ebf_log[log_list_entry[0].decode("utf-8")] = log_list_entry[1].decode("utf-8")
 
     return ebf_log
 
@@ -3551,17 +4564,26 @@ def make_label_file(h5file_name, overwrite=False):
         Table containing the dataset name, and corresponding l, b, and number of objects.
 
     """
-    data_dict = {'file_name': [], 'long_start': [], 'long_end': [],
-                 'lat_start': [], 'lat_end': [], 'objects': [],
-                 'N_stars': [], 'N_WD': [], 'N_NS': [], 'N_BH': []}
+    data_dict = {
+        "file_name": [],
+        "long_start": [],
+        "long_end": [],
+        "lat_start": [],
+        "lat_end": [],
+        "objects": [],
+        "N_stars": [],
+        "N_WD": [],
+        "N_NS": [],
+        "N_BH": [],
+    }
 
-    hf = h5py.File(h5file_name + '.h5', 'r')
-    l_array = hf['long_bin_edges']
-    b_array = hf['lat_bin_edges']
+    hf = h5py.File(h5file_name + ".h5", "r")
+    l_array = hf["long_bin_edges"]
+    b_array = hf["lat_bin_edges"]
 
     for ll in range(len(l_array) - 1):
         for bb in range(len(b_array) - 1):
-            dset_name = 'l' + str(ll) + 'b' + str(bb)
+            dset_name = "l" + str(ll) + "b" + str(bb)
             dataset = hf[dset_name]
 
             if len(dataset) == 0:
@@ -3570,36 +4592,48 @@ def make_label_file(h5file_name, overwrite=False):
                 N_NS = 0
                 N_BH = 0
             else:
-                N_stars = np.sum(dataset['rem_id'] == 0)
-                N_WD = np.sum(dataset['rem_id'] == 101)
-                N_NS = np.sum(dataset['rem_id'] == 102)
-                N_BH = np.sum(dataset['rem_id'] == 103)
+                N_stars = np.sum(dataset["rem_id"] == 0)
+                N_WD = np.sum(dataset["rem_id"] == 101)
+                N_NS = np.sum(dataset["rem_id"] == 102)
+                N_BH = np.sum(dataset["rem_id"] == 103)
 
-            data_dict['file_name'].append(dset_name)
-            data_dict['long_start'].append(l_array[ll])
-            data_dict['long_end'].append(l_array[ll + 1])
-            data_dict['lat_start'].append(b_array[bb])
-            data_dict['lat_end'].append(b_array[bb + 1])
-            data_dict['objects'].append(dataset.shape[0])
-            data_dict['N_stars'].append(N_stars)
-            data_dict['N_WD'].append(N_WD)
-            data_dict['N_NS'].append(N_NS)
-            data_dict['N_BH'].append(N_BH)
+            data_dict["file_name"].append(dset_name)
+            data_dict["long_start"].append(l_array[ll])
+            data_dict["long_end"].append(l_array[ll + 1])
+            data_dict["lat_start"].append(b_array[bb])
+            data_dict["lat_end"].append(b_array[bb + 1])
+            data_dict["objects"].append(dataset.shape[0])
+            data_dict["N_stars"].append(N_stars)
+            data_dict["N_WD"].append(N_WD)
+            data_dict["N_NS"].append(N_NS)
+            data_dict["N_BH"].append(N_BH)
 
     hf.close()
 
-    label_file = Table(data_dict, names=('file_name', 'long_start', 'long_end',
-                                         'lat_start', 'lat_end', 'objects',
-                                         'N_stars', 'N_WD', 'N_NS', 'N_BH'))
-    label_file['long_start'].format = '08.3f'
-    label_file['long_end'].format = '08.3f'
-    label_file['lat_start'].format = '07.3f'
-    label_file['lat_end'].format = '07.3f'
+    label_file = Table(
+        data_dict,
+        names=(
+            "file_name",
+            "long_start",
+            "long_end",
+            "lat_start",
+            "lat_end",
+            "objects",
+            "N_stars",
+            "N_WD",
+            "N_NS",
+            "N_BH",
+        ),
+    )
+    label_file["long_start"].format = "08.3f"
+    label_file["long_end"].format = "08.3f"
+    label_file["lat_start"].format = "07.3f"
+    label_file["lat_end"].format = "07.3f"
 
     now = datetime.datetime.now()
-    label_file.meta['label'] = 'label.fits file creation time: ' + str(now)
+    label_file.meta["label"] = "label.fits file creation time: " + str(now)
 
-    label_file.write(h5file_name + '_label.fits', overwrite=overwrite)
+    label_file.write(h5file_name + "_label.fits", overwrite=overwrite)
 
     return
 
@@ -3607,6 +4641,7 @@ def make_label_file(h5file_name, overwrite=False):
 ###########################################################################
 ############ General formulas, conversions, and calculations ##############
 ###########################################################################
+
 
 def heliocentric_to_galactic(x, y, z):
     """
@@ -3623,7 +4658,7 @@ def heliocentric_to_galactic(x, y, z):
         Galactic coordinates r, b, and l (in kpc and degrees)
 
     """
-    r = (x ** 2 + y ** 2 + z ** 2) ** 0.5
+    r = (x**2 + y**2 + z**2) ** 0.5
 
     # np.arccos will return a value between 0 and pi
     # so b will be between -90 and 90 degrees
@@ -3682,7 +4717,7 @@ def einstein_radius(M, d_L, d_S):
     ------
         Einstein radius, in mas
     """
-    return 2.85 * M ** 0.5 * (1 / d_L - 1 / d_S) ** 0.5
+    return 2.85 * M**0.5 * (1 / d_L - 1 / d_S) ** 0.5
 
 
 def calc_sph_motion(vx, vy, vz, r, b, l):
@@ -3757,7 +4792,7 @@ def calc_magnification(u):
     Magnification factor : float or array
 
     """
-    return (u ** 2 + 2) / (u * np.sqrt(u ** 2 + 4))
+    return (u**2 + 2) / (u * np.sqrt(u**2 + 4))
 
 
 def calc_delta_c(u, thetaE):
@@ -3765,7 +4800,7 @@ def calc_delta_c(u, thetaE):
     Calculate the maximum centroid shift for a dark lens,
     no neighbors
     """
-    delta_c = u * thetaE / (u ** 2 + 2)
+    delta_c = u * thetaE / (u**2 + 2)
 
     return delta_c
 
@@ -3792,7 +4827,9 @@ def calc_delta_c_LL(fratio, u0, thetaE):
         delta_array = np.zeros(len(u_array))
         for i in np.arange(len(u_array)):
             u = u_array[i]
-            delta_array[i] = (u - f * u ** 2 * np.sqrt(u ** 2 + 4)) / (2 + u ** 2 + f * u * np.sqrt(u ** 2 + 4)) + (u * f) / (1 + f)
+            delta_array[i] = (u - f * u**2 * np.sqrt(u**2 + 4)) / (
+                2 + u**2 + f * u * np.sqrt(u**2 + 4)
+            ) + (u * f) / (1 + f)
         max_idx = np.argmax(delta_array)
         final_delta_array[j] = delta_array[max_idx]
         final_u_array[j] = u_array[max_idx]
@@ -3808,8 +4845,9 @@ def max_delta_c(u0, thetaE):
     small_idx = np.where(u0 <= np.sqrt(2))[0]
 
     max_delta_c_array[big_idx] = calc_delta_c(u0[big_idx], thetaE[big_idx])
-    max_delta_c_array[small_idx] = calc_delta_c(np.ones(len(small_idx)) * np.sqrt(2),
-                                                thetaE[small_idx])
+    max_delta_c_array[small_idx] = calc_delta_c(
+        np.ones(len(small_idx)) * np.sqrt(2), thetaE[small_idx]
+    )
 
     return max_delta_c_array
 
@@ -3845,7 +4883,7 @@ def get_u_from_t(u0, t0, tE, t):
         Separation of lens and source (normalized to Einstein radius)
     """
     tau = (t - t0) / tE
-    u = np.sqrt(u0 ** 2 + tau ** 2)
+    u = np.sqrt(u0**2 + tau**2)
     return u
 
 
@@ -3879,7 +4917,7 @@ def get_t_from_u(u0, t0, tE, u):
     t : float or array
         Time corresponding to the separation u
     """
-    t = tE * np.sqrt(u ** 2 - u0 ** 2) + t0
+    t = tE * np.sqrt(u**2 - u0**2) + t0
     return t
 
 
@@ -3950,13 +4988,15 @@ def calc_centroid_shift(glat_S, glon_S, glat_N, glon_N, f_L, f_S, f_N, u):
     # Calculating the centroid shift in the frame of the lens
     ##########
 
-    t1a1_t2a2 = (u ** 2 + 3) / (u * np.sqrt(u ** 2 + 4))
+    t1a1_t2a2 = (u**2 + 3) / (u * np.sqrt(u**2 + 4))
     a1_a2 = calc_magnification(u)
 
     glat_c_lensed = (t1a1_t2a2 * f_S * glat_S + glat_N * f_N) / (
-            a1_a2 * f_S + f_L + f_N)
+        a1_a2 * f_S + f_L + f_N
+    )
     glon_c_lensed = (t1a1_t2a2 * f_S * glon_S + glon_N * f_N) / (
-            a1_a2 * f_S + f_L + f_N)
+        a1_a2 * f_S + f_L + f_N
+    )
 
     glat_c_unlensed = (glat_S * f_S + glat_N * f_N) / (f_S + f_L + f_N)
     glon_c_unlensed = (glon_S * f_S + glon_N * f_N) / (f_S + f_L + f_N)
@@ -3964,11 +5004,12 @@ def calc_centroid_shift(glat_S, glon_S, glat_N, glon_N, f_L, f_S, f_N, u):
     glat_delta_c = glat_c_lensed - glat_c_unlensed
     glon_delta_c = glon_c_lensed - glon_c_unlensed
 
-    delta_c_obs = np.sqrt(glat_delta_c ** 2 + glon_delta_c ** 2 * np.cos(
-        np.radians(glat_S)) ** 2)
+    delta_c_obs = np.sqrt(
+        glat_delta_c**2 + glon_delta_c**2 * np.cos(np.radians(glat_S)) ** 2
+    )
 
     # Convert from degrees to mas
-    delta_c_obs *= 3.6 * 10 ** 6
+    delta_c_obs *= 3.6 * 10**6
 
     return delta_c_obs
 
@@ -4096,7 +5137,7 @@ def get_Alambda_AKs(red_law_name, lambda_eff):
         Alambda/AKs
 
     """
-    red_law_class = getattr(reddening, 'RedLaw' + red_law_name)
+    red_law_class = getattr(reddening, "RedLaw" + red_law_name)
     red_law = red_law_class()
     red_law_method = getattr(red_law, red_law_name)
     Alambda_AKs = red_law_method(lambda_eff, 1)
@@ -4109,12 +5150,10 @@ def calc_f(lambda_eff):
     Calculate that coefficient f that multiples E(B-V) to get the
     extinction in magnitudes
     """
-    B = get_Alambda_AKs('Damineli16', 0.445)
-    V = get_Alambda_AKs('Damineli16', 0.551)
-    L = get_Alambda_AKs('Damineli16', lambda_eff)
+    B = get_Alambda_AKs("Damineli16", 0.445)
+    V = get_Alambda_AKs("Damineli16", 0.551)
+    L = get_Alambda_AKs("Damineli16", lambda_eff)
 
     f = L * (B - V) ** -1
 
     return f
-
-
