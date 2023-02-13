@@ -2382,7 +2382,7 @@ def add_pbh(
 
 ##########
 # Add ffps in the same way that pbhs are added.
-def add_pbh(
+def add_ffp(
     hdf5_file,
     ebf_file,
     fdm=1,
