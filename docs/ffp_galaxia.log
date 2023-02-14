@@ -8,13 +8,13 @@ seed , None
 
 VERSION INFORMATION
 -----------------------------
-2023-02-14 05:02:59.091415 : creation date
-94c7d53c28a129f891d0795168fdc0151d651ffb : PopSyCLE commit
+2023-02-14 16:56:18.397189 : creation date
+0af03f519c01596525c752d4e15198e1393f6743 : PopSyCLE commit
 /bin/galaxia/bin/galaxia : galaxia path
 
 OTHER INFORMATION
 -----------------------------
-698.6922426223755 : total runtime (s)
+117.85644125938416 : total runtime (s)
 
 FILES CREATED
 -----------------------------
