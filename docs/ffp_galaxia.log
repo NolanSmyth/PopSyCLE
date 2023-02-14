@@ -1,0 +1,21 @@
+FUNCTION INPUT PARAMETERS
+-----------------------------
+longitude , 1.0
+latitude , -1.03
+area , 0.0016
+galaxia_galaxy_model_filename , galaxyModelParams_Popsycle_roman_docker.txt
+seed , None
+
+VERSION INFORMATION
+-----------------------------
+2023-02-14 05:02:59.091415 : creation date
+94c7d53c28a129f891d0795168fdc0151d651ffb : PopSyCLE commit
+/bin/galaxia/bin/galaxia : galaxia path
+
+OTHER INFORMATION
+-----------------------------
+698.6922426223755 : total runtime (s)
+
+FILES CREATED
+-----------------------------
+ffp.ebf : ebf file
