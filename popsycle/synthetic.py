@@ -2000,6 +2000,7 @@ def add_pbh(
     )
 
     # Determine dark matter density at all galactocentric radii along the line-of-sight
+    #todo the ffp density will track the stellar density more closely than the DM density. 
     rho_lin = rho_dmhalo(
         galacto_lin.spherical.distance.value, rho_0=rho_0, r_s=r_s, gamma=gamma
     )

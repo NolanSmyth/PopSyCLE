@@ -4,7 +4,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get clean
 
 RUN apt-get install -y curl python3 python3-dev python3-distutils python3-pip git wget
 
-RUN pip3 install astropy pysynphot scipy numpy matplotlib h5py sklearn scikit-learn ipython
+RUN pip3 install astropy pysynphot scipy numpy matplotlib h5py scikit-learn ipython
 
 RUN apt-get install vim -y
 
@@ -19,8 +19,8 @@ WORKDIR /galaxia_models
 RUN wget http://bhs.astro.berkeley.edu/GalaxiaData.tar.gz
 RUN tar -xvf GalaxiaData.tar.gz && rm GalaxiaData.tar.gz
 
-WORKDIR /bin/galaxia
-RUN ./configure --prefix=/bin/galaxia/bin
+WORKDIR /galaxia
+RUN ./configure --prefix=/bin/galaxia
 RUN make
 RUN make install
 
@@ -30,7 +30,7 @@ RUN echo "export PATH=/bin/galaxia/bin:$PATH" >> ~/.bashrc
 
 RUN export PYTHONPATH=$PYTHONPATH:/PopSyCLE
 
-RUN git clone https://github.com/NolanSmyth/PopSyCLE.git
+RUN git clone https://github.com/NolanSmyth/PopSyCLE.git#ffp
 
 ENV PYTHONPATH "${PYTHONPATH}:/PopSyCLE/"
 
