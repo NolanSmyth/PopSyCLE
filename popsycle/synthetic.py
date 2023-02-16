@@ -9,6 +9,7 @@ Including:
 - refine_events
 - add_pbh
 """
+# in container 2
 import numpy as np
 import h5py
 import math
@@ -713,7 +714,7 @@ def perform_pop_syn(
     h5file["lat_bin_edges"] = lat_bin_edges
     h5file["long_bin_edges"] = long_bin_edges
     h5file["add_pbh"] = False
-    #todo add flag for add_ffps
+    # todo add flag for add_ffps
     h5file.close()
 
     ##########
@@ -948,7 +949,7 @@ def perform_pop_syn(
     binned_counter = 0
     hf = h5py.File(output_root + ".h5", "r")
     for key in hf:
-        #todo add add_ffp flag to conditions?
+        # todo add add_ffp flag to conditions?
         if "bin_edges" not in key and "add_pbh" not in key:
             binned_counter += len(hf[key])
 
@@ -2000,7 +2001,7 @@ def add_pbh(
     )
 
     # Determine dark matter density at all galactocentric radii along the line-of-sight
-    #todo the ffp density will track the stellar density more closely than the DM density. 
+    # todo the ffp density will track the stellar density more closely than the DM density.
     rho_lin = rho_dmhalo(
         galacto_lin.spherical.distance.value, rho_0=rho_0, r_s=r_s, gamma=gamma
     )
@@ -2470,7 +2471,7 @@ def add_ffp(
     # whether input types are correct.
     ##########
 
-    #todo create _check_add_ffp function
+    # todo create _check_add_ffp function
 
     _check_add_pbh(
         hdf5_file=hdf5_file,
