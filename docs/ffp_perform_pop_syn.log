@@ -1,0 +1,27 @@
+FUNCTION INPUT PARAMETERS
+-----------------------------
+ebf_file , ffp.ebf
+output_root , ffp
+bin_edges_number , 3
+BH_kick_speed_mean , 100 , (km/s)
+NS_kick_speed_mean , 350 , (km/s)
+iso_dir , /galaxia_models/GalaxiaData/Isochrones/
+seed , None
+
+VERSION INFORMATION
+-----------------------------
+2023-02-14 18:20:53.334272 : creation date
+7efb88bfca47d95c48139f9388d038b7e7ce92b3 : PopStar commit
+0af03f519c01596525c752d4e15198e1393f6743 : PopSyCLE commit
+
+OTHER INFORMATION
+-----------------------------
+4815.429819822311 : total runtime (s)
+700866 : total stars from Galaxia
+53974 : total compact objects made
+754840 : total things binned
+
+FILES CREATED
+-----------------------------
+ffp.h5 : HDF5 file
+ffp_label.fits : label file

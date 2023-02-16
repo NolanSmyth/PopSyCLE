@@ -4,7 +4,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get clean
 
 RUN apt-get install -y curl python3 python3-dev python3-distutils python3-pip git wget
 
-RUN pip3 install astropy pysynphot scipy numpy matplotlib h5py scikit-learn ipython
+RUN pip3 install astropy pysynphot scipy numpy matplotlib h5py scikit-learn notebook
 
 RUN apt-get install vim -y
 
@@ -30,7 +30,9 @@ RUN echo "export PATH=/bin/galaxia/bin:$PATH" >> ~/.bashrc
 
 RUN export PYTHONPATH=$PYTHONPATH:/PopSyCLE
 
-RUN git clone https://github.com/NolanSmyth/PopSyCLE.git#ffp
+WORKDIR /
+
+RUN git clone https://github.com/NolanSmyth/PopSyCLE.git
 
 ENV PYTHONPATH "${PYTHONPATH}:/PopSyCLE/"
 

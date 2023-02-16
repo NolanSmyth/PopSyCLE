@@ -18,6 +18,8 @@ MANIFEST
 .ipynb_checkpoints
 *.h5
 *.ebf
+*.fits
+*.log
 
 # Sphinx
 docs/api
