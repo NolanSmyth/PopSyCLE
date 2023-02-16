@@ -9,7 +9,6 @@ Including:
 - refine_events
 - add_pbh
 """
-# in container 2
 import numpy as np
 import h5py
 import math
