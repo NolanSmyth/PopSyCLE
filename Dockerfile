@@ -4,7 +4,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get clean
 
 RUN apt-get install -y curl python3 python3-dev python3-distutils python3-pip git wget
 
-RUN pip3 install astropy pysynphot scipy numpy matplotlib h5py scikit-learn notebook
+RUN pip3 install astropy pysynphot scipy numpy matplotlib h5py scikit-learn notebook pandas
 
 RUN apt-get install vim -y
 
