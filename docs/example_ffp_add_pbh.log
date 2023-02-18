@@ -15,15 +15,15 @@ seed , None
 
 VERSION INFORMATION
 -----------------------------
-2023-02-14 18:34:54.723055 : creation date
-0af03f519c01596525c752d4e15198e1393f6743 : PopSyCLE commit
+2023-02-18 02:28:38.102074 : creation date
+9cfa498c609581e4b6c96dc7bc75dc7a8483a2f1 : PopSyCLE commit
 
 OTHER INFORMATION
 -----------------------------
-21.157493114471436 : total runtime (s)
+34.41077780723572 : total runtime (s)
 754840 : original objects
-1535 : PBHs in the field
-756375 : new total objects
+1556 : PBHs in the field
+756396 : new total objects
 
 FILES CREATED
 -----------------------------
