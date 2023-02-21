@@ -1,6 +1,6 @@
 FUNCTION INPUT PARAMETERS
 -----------------------------
-hdf5_file , example_ffp.h5
+hdf5_file , example_ffp_copy.h5
 output_root2 , example_ffp
 radius_cut , 2.0 , (arcsec)
 obs_time , 18 , (days)
@@ -11,13 +11,13 @@ n_proc , 7
 
 VERSION INFORMATION
 -----------------------------
-2023-02-14 18:39:46.602225 : creation date
-0af03f519c01596525c752d4e15198e1393f6743 : PopSyCLE commit
+2023-02-21 05:11:37.152845 : creation date
+9cfa498c609581e4b6c96dc7bc75dc7a8483a2f1 : PopSyCLE commit
 
 OTHER INFORMATION
 -----------------------------
-74.4736430644989 : total runtime (s)
-14 : total number of events
+21.85239815711975 : total runtime (s)
+16 : total number of events
 
 FILES CREATED
 -----------------------------
