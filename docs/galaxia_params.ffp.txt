@@ -15,7 +15,7 @@ surveyArea 0.00160
 fSample 1
 popID -1
 warpFlareOn 1
-seed 87
+seed 91
 r_max 30
 starType 0
 photoError 0
