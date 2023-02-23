@@ -17,4 +17,5 @@ mock_roman_params = {
     "area": 0.016,
     "BH_kick_speed_mean": 100,
     "NS_kick_speed_mean": 350,
+    "FFP_kick_speed_mean": 10,
 }

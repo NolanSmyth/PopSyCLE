@@ -11,11 +11,11 @@ colorLimits[1] 1000
 geometryOption 1
 longitude 1.000000
 latitude -1.030000
-surveyArea 0.00160
+surveyArea 0.01600
 fSample 1
 popID -1
 warpFlareOn 1
-seed 91
+seed 87
 r_max 30
 starType 0
 photoError 0
