@@ -14,7 +14,7 @@ mock_roman_params = {
     "longitude": 1.00,
     "latitude": -1.03,
     #  "area": 0.16,
-    "area": 0.0016,
+    "area": 0.016,
     "BH_kick_speed_mean": 100,
     "NS_kick_speed_mean": 350,
 }
